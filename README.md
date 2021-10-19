@@ -20,7 +20,7 @@ This is project is not affiliated with the ZUnivers's project. It's a community 
 
 ## Usage
 
-- Install the package with `go install github.com/alexpresso/zunivers-webhooks`
+- Install the package with `go install github.com/alexpresso/zunivers-webhooks@latest`
 - Copy `config.example.json` to `config.json`
 - Create one or more [webhook endpoint(s)](https://support.discord.com/hc/fr/articles/228383668-Utiliser-les-Webhooks)
 - Copy/paste their URL into the `urls` property of each event you want to listen

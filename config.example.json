@@ -1,0 +1,25 @@
+{
+  "frontBaseUrl": "https://zunivers.zerator.com",
+  "api": {
+    "baseUrl": "https://zunivers-api.zerator.com",
+    "timeout": 10
+  },
+  "webhooks": {
+    "config_changed": {
+      "urls": [],
+      "message": "Un paramètre de configuration a changé !"
+    },
+    "new_patchnote": {
+      "urls": [],
+      "message": "Une nouvelle patchnote a été publiée !"
+    },
+    "status_changed": {
+      "urls": [],
+      "message": "Le statut de l'application a changé."
+    },
+    "new_day": {
+      "urls": [],
+      "message": "C'est l'heure du `!daily` ! (<#808432657838768168>)"
+    }
+  }
+}

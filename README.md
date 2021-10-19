@@ -4,6 +4,10 @@ Discord webhooks dispatcher for the ZUnivers card game.
 
 ![preview](https://i.imgur.com/pAWleMn.png)
 
+## Disclaimer
+
+This is project is not affiliated with the ZUnivers's project. It's a community project.
+
 ## Features
 
 - ✅ `!daily` reminder

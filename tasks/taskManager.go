@@ -8,10 +8,10 @@ import (
 )
 
 func ScheduleTasks(db *gorm.DB) {
-	s := gocron.NewScheduler(time.UTC)
+	s := gocron.NewScheduler(time.Local)
 
 	_, _ = s.Every(20).Minutes().Do(checkInfos, db)
-	_, _ = s.Every(1).Days().Do(newDay)
+	_, _ = s.Every(1).Days().At("00:01").Do(newDay)
 
 	s.StartBlocking()
 }

@@ -20,6 +20,7 @@ Discord webhooks dispatcher for the ZUnivers card game.
 - Copy `config.example.json` to `config.json`
 - Create one or more [webhook(s)](https://support.discord.com/hc/fr/articles/228383668-Utiliser-les-Webhooks)
 - Copy/paste their URL into the `urls` property of each event you want to listen
+- Open a CLI and type `zunivers-webhooks`
 
 `config.json` example:
 

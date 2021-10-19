@@ -1,10 +1,10 @@
 package tasks
 
 import (
+	"github.com/alexpresso/zunivers-webhooks/utils"
 	"github.com/go-co-op/gocron"
 	"gorm.io/gorm"
 	"time"
-	"zunivers-webhooks/utils"
 )
 
 func ScheduleTasks(db *gorm.DB) {

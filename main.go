@@ -1,9 +1,9 @@
 package main
 
 import (
-	"zunivers-webhooks/database"
-	"zunivers-webhooks/tasks"
-	"zunivers-webhooks/utils"
+	"github.com/alexpresso/zunivers-webhooks/database"
+	"github.com/alexpresso/zunivers-webhooks/tasks"
+	"github.com/alexpresso/zunivers-webhooks/utils"
 )
 
 func main() {

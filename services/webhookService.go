@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/alexpresso/zunivers-webhooks/structures/discord"
+	"github.com/alexpresso/zunivers-webhooks/utils"
 	"github.com/spf13/viper"
 	"net/http"
 	"reflect"
-	"zunivers-webhooks/structures/discord"
-	"zunivers-webhooks/utils"
 )
 
 func DispatchEvent(event string, oldObject, newObject interface{}) {

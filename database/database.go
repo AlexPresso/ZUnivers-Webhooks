@@ -1,11 +1,11 @@
 package database
 
 import (
+	"github.com/alexpresso/zunivers-webhooks/structures"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"log"
-	"zunivers-webhooks/structures"
 )
 
 func Init() (db *gorm.DB) {

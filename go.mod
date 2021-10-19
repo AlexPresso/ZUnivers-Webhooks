@@ -1,4 +1,4 @@
-module zunivers-webhooks
+module github.com/alexpresso/zunivers-webhooks
 
 go 1.17
 

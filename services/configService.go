@@ -1,8 +1,8 @@
 package services
 
 import (
-	"zunivers-webhooks/structures"
-	"zunivers-webhooks/utils"
+	"github.com/alexpresso/zunivers-webhooks/structures"
+	"github.com/alexpresso/zunivers-webhooks/utils"
 )
 
 func FetchConfigs() (configs []structures.Config, err error) {

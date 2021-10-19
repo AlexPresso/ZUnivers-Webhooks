@@ -1,10 +1,10 @@
 package tasks
 
 import (
+	"github.com/alexpresso/zunivers-webhooks/services"
+	"github.com/alexpresso/zunivers-webhooks/structures"
+	"github.com/alexpresso/zunivers-webhooks/utils"
 	"gorm.io/gorm"
-	"zunivers-webhooks/services"
-	"zunivers-webhooks/structures"
-	"zunivers-webhooks/utils"
 )
 
 func checkStatus(db *gorm.DB) {

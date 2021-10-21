@@ -16,11 +16,11 @@ func checkStatus(db *gorm.DB) {
 
 	var currStatus structures.Status
 	if res := db.First(&currStatus); res.Error == nil {
-		if currStatus.ApplicationVersion != status.ApplicationVersion || currStatus.DbVersion != status.DbVersion {
+		status.ID = currStatus.ID
+
+		if utils.AreDifferent(currStatus, status) {
 			services.DispatchEvent("status_changed", currStatus, status)
 		}
-
-		status.ID = currStatus.ID
 	}
 
 	db.Save(&status)

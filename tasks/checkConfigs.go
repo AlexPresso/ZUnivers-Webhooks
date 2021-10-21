@@ -30,7 +30,7 @@ func checkConfigs(db *gorm.DB) {
 		if dbConfig != nil {
 			config.ID = dbConfig.ID
 
-			if dbConfig.CraftValue != config.CraftValue || dbConfig.RecycleValue != config.RecycleValue {
+			if utils.AreDifferent(*dbConfig, *config) {
 				services.DispatchEvent("config_changed", *dbConfig, *config)
 			}
 		} else if len(dbConfigs) > 0 {

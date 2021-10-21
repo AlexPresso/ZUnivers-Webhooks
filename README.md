@@ -14,8 +14,8 @@ This is project is not affiliated with the ZUnivers's project. It's a community 
 - ✅ Notify for new patchnotes
 - ✅ Notify for configuration changes
 - ✅ Notify for new webapp versions
-- ❌ Notify for new items/item changes (SoonTM)
-- ❌ Notify for new packs (SoonTM)
+- ✅ Notify for new items/item changes
+- ✅ Notify for new packs/packs changes
 - ✅ Per event multiple webhook dispatching
 
 ## Usage

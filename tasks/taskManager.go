@@ -20,6 +20,7 @@ func checkInfos(db *gorm.DB) {
 	checkStatus(db)
 	checkConfigs(db)
 	checkPatchnotes(db)
+	checkItems(db)
 
 	utils.Log("Checked for infos.")
 }

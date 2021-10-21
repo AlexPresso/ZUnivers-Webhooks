@@ -59,6 +59,30 @@ This is project is not affiliated with the ZUnivers's project. It's a community 
         "https://discord.com/api/webhooks/123456789123456111/.............................."
       ],
       "message": "C'est l'heure du `!daily` ! (<#808432657838768168>)"
+    },
+    "item_changed": {
+      "urls": [
+        "https://discord.com/api/webhooks/123456789123456111/.............................."
+      ],
+      "message": "Un item a été modifié !"
+    },
+    "new_item": {
+      "urls": [
+        "https://discord.com/api/webhooks/123456789123456111/.............................."
+      ],
+      "message": "Un nouvel item a été ajouté !"
+    },
+    "pack_changed": {
+      "urls": [
+        "https://discord.com/api/webhooks/123456789123456111/.............................."
+      ],
+      "message": "Un Pack a été modifié !"
+    },
+    "new_pack": {
+      "urls": [
+        "https://discord.com/api/webhooks/123456789123456111/.............................."
+      ],
+      "message": "Un nouveau pack a été ajouté !"
     }
   }
 }

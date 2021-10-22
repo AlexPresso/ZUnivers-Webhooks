@@ -5,24 +5,28 @@ import (
 	"io/fs"
 	"log"
 	"os"
+	"path/filepath"
+	"runtime"
 )
 
 func LoadConfig() {
 	newConfig := false
 	dir, err := os.Getwd()
-	path := dir + "/config.json"
+	workingPath := dir + "/config.json"
+	_, b, _, _ := runtime.Caller(0)
+	basepath := filepath.Dir(b)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	viper.SetConfigFile(path)
+	viper.SetConfigFile(workingPath)
 	err = viper.ReadInConfig()
 	if err != nil {
 		if _, notFound := err.(*fs.PathError); notFound {
 			Log("Missing config file, creating an empty one for you.")
-			viper.SetConfigFile("config.default.json")
+			viper.SetConfigFile(basepath + "/../config.default.json")
 			err = viper.ReadInConfig()
-			err = viper.WriteConfigAs(path)
+			err = viper.WriteConfigAs(workingPath)
 
 			newConfig = true
 

@@ -16,7 +16,16 @@ func Init() (db *gorm.DB) {
 		log.Fatal("Cannot initialize DB: " + err.Error())
 	}
 
-	if err := db.AutoMigrate(&structures.Config{}, &structures.Patchnote{}, &structures.Status{}, &structures.Pack{}, &structures.Item{}); err != nil {
+	err = db.AutoMigrate(
+		&structures.Config{},
+		&structures.Patchnote{},
+		&structures.Status{},
+		&structures.Pack{},
+		&structures.Item{},
+		&structures.Season{},
+	)
+
+	if err != nil {
 		log.Fatal("Error migrating schema: " + err.Error())
 	}
 	return

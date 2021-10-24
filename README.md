@@ -6,7 +6,7 @@ Discord webhooks dispatcher for the ZUnivers card game.
 
 ## Disclaimer
 
-This is project is not affiliated with the ZUnivers's project. It's a community project.
+This project is not affiliated with the ZUnivers's project. It's a community project.
 
 ## Features
 

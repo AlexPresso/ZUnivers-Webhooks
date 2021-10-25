@@ -10,15 +10,20 @@ type WebhookFormData struct {
 }
 
 type DiscordEmbed struct {
-	Title       string               `json:"title"`
-	Type        string               `json:"type"`
-	Description string               `json:"description"`
-	URL         string               `json:"url"`
-	Timestamp   string               `json:"timestamp"`
-	Color       uint32               `json:"color"`
-	Fields      []*DiscordEmbedField `json:"fields"`
-	Footer      *DiscordEmbedFooter  `json:"footer"`
-	Author      *DiscordAuthor       `json:"author"`
+	Title       string                 `json:"title"`
+	Type        string                 `json:"type"`
+	Description string                 `json:"description"`
+	URL         string                 `json:"url"`
+	Timestamp   string                 `json:"timestamp"`
+	Color       uint32                 `json:"color"`
+	Fields      []*DiscordEmbedField   `json:"fields"`
+	Footer      *DiscordEmbedFooter    `json:"footer"`
+	Author      *DiscordAuthor         `json:"author"`
+	Thumbnail   *DiscordEmbedThumbnail `json:"thumbnail"`
+}
+
+type DiscordEmbedThumbnail struct {
+	Url string `json:"url"`
 }
 
 type DiscordEmbedField struct {

@@ -1,5 +1,6 @@
 {
   "frontBaseUrl": "https://zunivers.zerator.com",
+  "cdnBaseUrl": "https://minio-zunivers-prod.prod.poneyy.fr/zunivers-prod",
   "api": {
     "baseUrl": "https://zunivers-api.zerator.com",
     "timeout": 10

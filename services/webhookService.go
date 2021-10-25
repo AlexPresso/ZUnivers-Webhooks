@@ -27,27 +27,28 @@ func DispatchEvent(event string, oldObject, newObject interface{}) {
 }
 
 func makeFormData(event string, oldObject, newObject interface{}) *discord.WebhookFormData {
+	embed := &discord.DiscordEmbed{
+		Title:       "",
+		Type:        "rich",
+		Description: viper.GetString(fmt.Sprintf("webhooks.%s.message", event)),
+		Color:       374272,
+		Author: &discord.DiscordAuthor{
+			Name:    "ZUnivers",
+			IconURL: viper.GetString("frontBaseUrl") + "/img/logo-mini.aea51074.png",
+			URL:     viper.GetString("frontBaseUrl"),
+		},
+	}
+
+	fillEmbed(embed, oldObject, newObject)
+
 	return &discord.WebhookFormData{
 		Username:  "ZUnivers-Webhooks",
 		AvatarURL: viper.GetString("frontBaseUrl") + "/img/logo-mini.aea51074.png",
-		Embeds: []*discord.DiscordEmbed{
-			{
-				Title:       "",
-				Type:        "rich",
-				Description: viper.GetString(fmt.Sprintf("webhooks.%s.message", event)),
-				Color:       374272,
-				Fields:      makeFields(oldObject, newObject),
-				Author: &discord.DiscordAuthor{
-					Name:    "ZUnivers",
-					IconURL: viper.GetString("frontBaseUrl") + "/img/logo-mini.aea51074.png",
-					URL:     viper.GetString("frontBaseUrl"),
-				},
-			},
-		},
+		Embeds:    []*discord.DiscordEmbed{embed},
 	}
 }
 
-func makeFields(oldObject, newObject interface{}) (fields []*discord.DiscordEmbedField) {
+func fillEmbed(embed *discord.DiscordEmbed, oldObject, newObject interface{}) {
 	if newObject == nil {
 		return
 	}
@@ -77,9 +78,12 @@ func makeFields(oldObject, newObject interface{}) (fields []*discord.DiscordEmbe
 			}
 
 			embedField.Value += fmt.Sprintf("__%s:__ %s`%s`\n", name, oldValueText, fmt.Sprint(newValue))
+		} else if uri, hasTag := newType.Field(i).Tag.Lookup("imageUrl"); hasTag {
+			embed.Thumbnail = &discord.DiscordEmbedThumbnail{
+				Url: viper.GetString("cdnBaseUrl") + fmt.Sprintf(uri, newObject.(reflect.Value).Field(i).Interface()),
+			}
 		}
 	}
 
-	fields = append(fields, embedField)
-	return
+	embed.Fields = []*discord.DiscordEmbedField{embedField}
 }

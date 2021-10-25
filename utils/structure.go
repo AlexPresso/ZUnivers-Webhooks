@@ -2,7 +2,7 @@ package utils
 
 import "reflect"
 
-func AreDifferent(a interface{}, b interface{}) bool {
+func AreDifferent(a, b interface{}) bool {
 	a = reflect.ValueOf(a)
 	bType := reflect.TypeOf(b)
 	b = reflect.ValueOf(b)

@@ -41,6 +41,14 @@
     "new_season": {
       "urls": [],
       "message": "Une nouvelle saison de l'ascension a démarré !"
+    },
+    "new_banner": {
+      "urls": [],
+      "message": "Une nouvelle bannière a été ajoutée !"
+    },
+    "banner_changed": {
+      "urls": [],
+      "message": "Une bannière a été modifiée !"
     }
   }
 }

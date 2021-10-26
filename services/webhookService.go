@@ -82,7 +82,7 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 		} else if uri, hasTag := newType.Field(i).Tag.Lookup("imageUrl"); hasTag {
 			uriParts := strings.Split(uri, ";")
 			cdnBase := viper.GetString("cdnBaseUrl")
-			if strings.Compare(uri, "%s") == 1 {
+			if strings.Compare(uriParts[0], "%s") == 0 {
 				cdnBase = ""
 			}
 
@@ -90,7 +90,7 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 				Url: cdnBase + fmt.Sprintf(uriParts[0], newObject.(reflect.Value).Field(i).Interface()),
 			}
 
-			if len(uriParts) > 0 && uriParts[1] == "image" {
+			if len(uriParts) > 1 && uriParts[1] == "image" {
 				embed.Image = media
 			} else {
 				embed.Thumbnail = media

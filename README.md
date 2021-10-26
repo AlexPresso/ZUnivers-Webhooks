@@ -2,7 +2,7 @@
 
 Discord webhooks dispatcher for the ZUnivers card game.
 
-![preview](https://i.imgur.com/pAWleMn.png)
+<img src="https://repository-images.githubusercontent.com/419089778/e78f5f5c-49cc-429a-8285-2e043b16fe05" height="320px">
 
 ## Disclaimer
 

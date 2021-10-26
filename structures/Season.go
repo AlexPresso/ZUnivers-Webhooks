@@ -8,9 +8,9 @@ type Season struct {
 	gorm.Model
 
 	SeasonID  string `json:"id"`
-	StartDate *Date  `json:"beginDate" display:"Début"`
-	EndDate   *Date  `json:"endDate" display:"Fin"`
-	Tower     `json:"tower" display:"Nom"`
+	StartDate *Date  `json:"beginDate" zu:"display=Début"`
+	EndDate   *Date  `json:"endDate" zu:"display=Fin"`
+	Tower     `json:"tower" zu:"display=Nom"`
 }
 
 type Tower struct {

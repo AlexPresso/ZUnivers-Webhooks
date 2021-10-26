@@ -23,6 +23,7 @@ func Init() (db *gorm.DB) {
 		&structures.Pack{},
 		&structures.Item{},
 		&structures.Season{},
+		&structures.Banner{},
 	)
 
 	if err != nil {

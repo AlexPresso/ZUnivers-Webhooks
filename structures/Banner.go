@@ -10,7 +10,7 @@ type Banner struct {
 	gorm.Model
 
 	BannerID string `json:"id"`
-	Title    string `json:"title" display:"Titre"`
-	Name     string `json:"name" display:"Nom"`
-	ImageURL string `json:"imageUrl" imageUrl:"%s;image"`
+	Title    string `json:"title" zu:"display=Titre"`
+	Name     string `json:"name" zu:"display=Nom"`
+	ImageURL string `json:"imageUrl" zu:"imageUrl=%s"`
 }

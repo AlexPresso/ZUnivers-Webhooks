@@ -1,6 +1,9 @@
 package utils
 
-import "reflect"
+import (
+	"reflect"
+	"strings"
+)
 
 func AreDifferent(a, b interface{}) bool {
 	a = reflect.ValueOf(a)
@@ -8,7 +11,7 @@ func AreDifferent(a, b interface{}) bool {
 	b = reflect.ValueOf(b)
 
 	for i := 0; i < bType.NumField(); i++ {
-		if _, hasTag := bType.Field(i).Tag.Lookup("display"); hasTag && a.(reflect.Value).Field(i).Interface() != b.(reflect.Value).Field(i).Interface() {
+		if val, hasTag := bType.Field(i).Tag.Lookup("zu"); hasTag && strings.Contains(val, "display") && a.(reflect.Value).Field(i).Interface() != b.(reflect.Value).Field(i).Interface() {
 			return true
 		}
 	}

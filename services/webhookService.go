@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 	"net/http"
 	"reflect"
+	"strings"
 )
 
 func DispatchEvent(event string, oldObject, newObject interface{}) {
@@ -27,12 +28,12 @@ func DispatchEvent(event string, oldObject, newObject interface{}) {
 }
 
 func makeFormData(event string, oldObject, newObject interface{}) *discord.WebhookFormData {
-	embed := &discord.DiscordEmbed{
+	embed := &discord.Embed{
 		Title:       "",
 		Type:        "rich",
 		Description: viper.GetString(fmt.Sprintf("webhooks.%s.message", event)),
 		Color:       374272,
-		Author: &discord.DiscordAuthor{
+		Author: &discord.Author{
 			Name:    "ZUnivers",
 			IconURL: viper.GetString("frontBaseUrl") + "/img/logo-mini.aea51074.png",
 			URL:     viper.GetString("frontBaseUrl"),
@@ -44,11 +45,11 @@ func makeFormData(event string, oldObject, newObject interface{}) *discord.Webho
 	return &discord.WebhookFormData{
 		Username:  "ZUnivers-Webhooks",
 		AvatarURL: viper.GetString("frontBaseUrl") + "/img/logo-mini.aea51074.png",
-		Embeds:    []*discord.DiscordEmbed{embed},
+		Embeds:    []*discord.Embed{embed},
 	}
 }
 
-func fillEmbed(embed *discord.DiscordEmbed, oldObject, newObject interface{}) {
+func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 	if newObject == nil {
 		return
 	}
@@ -59,7 +60,7 @@ func fillEmbed(embed *discord.DiscordEmbed, oldObject, newObject interface{}) {
 
 	newType := reflect.TypeOf(newObject)
 	newObject = reflect.ValueOf(newObject)
-	embedField := &discord.DiscordEmbedField{
+	embedField := &discord.EmbedField{
 		Name:   "Détails",
 		Value:  "",
 		Inline: false,
@@ -79,11 +80,24 @@ func fillEmbed(embed *discord.DiscordEmbed, oldObject, newObject interface{}) {
 
 			embedField.Value += fmt.Sprintf("__%s:__ %s`%s`\n", name, oldValueText, fmt.Sprint(newValue))
 		} else if uri, hasTag := newType.Field(i).Tag.Lookup("imageUrl"); hasTag {
-			embed.Thumbnail = &discord.DiscordEmbedThumbnail{
-				Url: viper.GetString("cdnBaseUrl") + fmt.Sprintf(uri, newObject.(reflect.Value).Field(i).Interface()),
+			uriParts := strings.Split(uri, ";")
+			cdnBase := viper.GetString("cdnBaseUrl")
+			if strings.Compare(uri, "%s") == 1 {
+				cdnBase = ""
 			}
+
+			media := &discord.EmbedMedia{
+				Url: cdnBase + fmt.Sprintf(uriParts[0], newObject.(reflect.Value).Field(i).Interface()),
+			}
+
+			if len(uriParts) > 0 && uriParts[1] == "image" {
+				embed.Image = media
+			} else {
+				embed.Thumbnail = media
+			}
+
 		}
 	}
 
-	embed.Fields = []*discord.DiscordEmbedField{embedField}
+	embed.Fields = []*discord.EmbedField{embedField}
 }

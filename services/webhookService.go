@@ -67,37 +67,53 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 	}
 
 	for i := 0; i < newType.NumField(); i++ {
-		if name, hasTag := newType.Field(i).Tag.Lookup("display"); hasTag {
-			oldValueText := ""
-			newValue := newObject.(reflect.Value).Field(i).Interface()
+		if tagValue, hasTag := newType.Field(i).Tag.Lookup("zu"); hasTag {
+			parts := strings.Split(tagValue, ";")
 
+			var oldValue interface{}
+			newValue := newObject.(reflect.Value).Field(i).Interface()
 			if oldObject != nil {
-				oldValue := oldObject.(reflect.Value).Field(i).Interface()
-				if oldValue != newValue {
-					oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprint(oldValue))
+				oldValue = oldObject.(reflect.Value).Field(i).Interface()
+			}
+
+			for _, part := range parts {
+				part := strings.Split(part, "=")
+
+				switch part[0] {
+				case "display":
+					processDisplay(embedField, oldValue, newValue, part)
+					break
+				case "imageUrl":
+					processImage(embed, newValue, part)
+					break
+				case "url":
+					embedField.Value += fmt.Sprintf("\n[Page de l'entité](%s)", viper.GetString("frontBaseUrl")+fmt.Sprintf(parts[1], newValue))
+					break
 				}
 			}
-
-			embedField.Value += fmt.Sprintf("__%s:__ %s`%s`\n", name, oldValueText, fmt.Sprint(newValue))
-		} else if uri, hasTag := newType.Field(i).Tag.Lookup("imageUrl"); hasTag {
-			uriParts := strings.Split(uri, ";")
-			cdnBase := viper.GetString("cdnBaseUrl")
-			if strings.Compare(uriParts[0], "%s") == 0 {
-				cdnBase = ""
-			}
-
-			media := &discord.EmbedMedia{
-				Url: cdnBase + fmt.Sprintf(uriParts[0], newObject.(reflect.Value).Field(i).Interface()),
-			}
-
-			if len(uriParts) > 1 && uriParts[1] == "image" {
-				embed.Image = media
-			} else {
-				embed.Thumbnail = media
-			}
-
 		}
 	}
 
 	embed.Fields = []*discord.EmbedField{embedField}
+}
+
+func processDisplay(field *discord.EmbedField, oldValue, newValue interface{}, parts []string) {
+	oldValueText := ""
+	if oldValue != nil && oldValue != newValue {
+		oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprint(oldValue))
+	}
+
+	field.Value += fmt.Sprintf("__%s:__ %s`%s`\n", parts[1], oldValueText, fmt.Sprint(newValue))
+}
+
+func processImage(embed *discord.Embed, newValue interface{}, parts []string) {
+	uriParts := strings.Split(parts[1], ";")
+	cdnBase := viper.GetString("cdnBaseUrl")
+	if strings.Compare(uriParts[0], "%s") == 0 {
+		cdnBase = ""
+	}
+
+	embed.Thumbnail = &discord.EmbedMedia{
+		Url: cdnBase + fmt.Sprintf(uriParts[0], newValue),
+	}
 }

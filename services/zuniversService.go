@@ -35,7 +35,7 @@ func FetchPatchnotes() (patchnotes []structures.Patchnote, err error) {
 	return
 }
 
-func FetchBanners() (banners []structures.Banner, err error) {
+func FetchBanners() (banners []structures.BannerInventoryEntry, err error) {
 	err = utils.Request("/public/banner/ZeratoR%231337", "GET", nil, &banners)
 	return
 }

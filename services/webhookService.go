@@ -18,10 +18,12 @@ func DispatchEvent(event string, oldObject, newObject interface{}) {
 	for _, url := range viper.GetStringSlice(fmt.Sprintf("webhooks.%s.urls", event)) {
 		url := url
 
-		_, err := http.Post(fmt.Sprintf("%s?wait=true", url), "application/json", bytes.NewBuffer(body))
+		res, err := http.Post(fmt.Sprintf("%s?wait=true", url), "application/json", bytes.NewBuffer(body))
 		if err != nil {
 			utils.Log(fmt.Sprintf("Failed to dispatch %s event", event))
 		}
+
+		fmt.Println(res)
 	}
 
 	utils.Log("Dispatched event: " + event)
@@ -99,6 +101,7 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 
 func processDisplay(field *discord.EmbedField, oldValue, newValue interface{}, parts []string) {
 	oldValueText := ""
+	//TODO: check for time castable and time.Time.Equal
 	if oldValue != nil && oldValue != newValue {
 		oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprint(oldValue))
 	}
@@ -107,13 +110,12 @@ func processDisplay(field *discord.EmbedField, oldValue, newValue interface{}, p
 }
 
 func processImage(embed *discord.Embed, newValue interface{}, parts []string) {
-	uriParts := strings.Split(parts[1], ";")
 	cdnBase := viper.GetString("cdnBaseUrl")
-	if strings.Compare(uriParts[0], "%s") == 0 {
+	if strings.Compare(parts[1], "%s") == 0 {
 		cdnBase = ""
 	}
 
 	embed.Thumbnail = &discord.EmbedMedia{
-		Url: cdnBase + fmt.Sprintf(uriParts[0], newValue),
+		Url: cdnBase + fmt.Sprintf(parts[1], newValue),
 	}
 }

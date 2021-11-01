@@ -87,7 +87,7 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 					processImage(embed, newValue, part)
 					break
 				case "url":
-					embedField.Value += fmt.Sprintf("\n[Page de l'entité](%s)", viper.GetString("frontBaseUrl")+fmt.Sprintf(parts[1], newValue))
+					embedField.Value += fmt.Sprintf("\n[Page de l'entité](%s)", viper.GetString("frontBaseUrl")+fmt.Sprintf(part[1], newValue))
 					break
 				}
 			}

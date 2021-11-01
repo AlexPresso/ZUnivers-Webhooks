@@ -101,9 +101,14 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 
 func processDisplay(field *discord.EmbedField, oldValue, newValue interface{}, parts []string) {
 	oldValueText := ""
-	//TODO: check for time castable and time.Time.Equal
-	if oldValue != nil && oldValue != newValue {
-		oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprint(oldValue))
+	if oldValue != nil {
+		if utils.IsTime(oldValue) {
+			if utils.TimeDifference(oldValue, newValue) {
+				oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprint(oldValue))
+			}
+		} else if oldValue != newValue {
+			oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprint(oldValue))
+		}
 	}
 
 	field.Value += fmt.Sprintf("__%s:__ %s`%s`\n", parts[1], oldValueText, fmt.Sprint(newValue))

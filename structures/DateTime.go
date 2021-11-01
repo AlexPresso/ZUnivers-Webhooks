@@ -42,3 +42,7 @@ func (ct DateTime) Value() (driver.Value, error) {
 func (ct DateTime) String() string {
 	return ct.Format("02.01.2006 à 15:04:05")
 }
+
+func (ct DateTime) ToTime() time.Time {
+	return time.Time(ct)
+}

@@ -49,6 +49,18 @@
     "banner_changed": {
       "urls": [],
       "message": "Une bannière a été modifiée !"
+    },
+    "new_event": {
+      "urls": [],
+      "message": "Un nouvel event a débuté !"
+    },
+    "event_changed": {
+      "urls": [],
+      "message": "Un event a été modifié"
+    },
+    "event_removed": {
+      "urls": [],
+      "message": "Un event s'est terminé."
     }
   }
 }

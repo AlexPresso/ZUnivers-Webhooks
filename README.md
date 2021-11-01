@@ -18,6 +18,7 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
 - ✅ Notify for new packs/packs changes
 - ✅ Notify for new banners/banners changes
 - ✅ Notify for new "ascension" season
+- ✅ Notify for new event/events changes
 - ✅ Per event multiple webhook dispatching
 
 ## Usage

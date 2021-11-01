@@ -39,3 +39,8 @@ func FetchBanners() (banners []structures.BannerInventoryEntry, err error) {
 	err = utils.Request("/public/banner/ZeratoR%231337", "GET", nil, &banners)
 	return
 }
+
+func FetchEvents() (events []structures.Event, err error) {
+	err = utils.Request("/public/event", "GET", nil, &events)
+	return
+}

@@ -48,7 +48,7 @@ func checkEvents(db *gorm.DB) {
 		event := event
 		if eventsMap[event.EventID] == nil {
 			db.Delete(&event)
-			services.DispatchEvent("removed_event", nil, event)
+			services.DispatchEvent("event_removed", nil, event)
 		}
 	}
 }

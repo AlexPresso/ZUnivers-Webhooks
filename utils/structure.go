@@ -17,8 +17,10 @@ func AreDifferent(a, b interface{}) bool {
 			aVal := a.(reflect.Value).Field(i).Interface()
 			bVal := b.(reflect.Value).Field(i).Interface()
 
-			if IsTime(aVal) && TimeDifference(aVal, bVal) {
-				return true
+			if IsTime(aVal) {
+				if TimeDifference(aVal, bVal) {
+					return true
+				}
 			} else if aVal != bVal {
 				return true
 			}

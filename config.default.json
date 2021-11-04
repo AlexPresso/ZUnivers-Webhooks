@@ -5,62 +5,21 @@
     "baseUrl": "https://zunivers-api.zerator.com",
     "timeout": 10
   },
-  "webhooks": {
-    "config_changed": {
-      "urls": [],
-      "message": "Un paramètre de configuration a changé !"
-    },
-    "new_patchnote": {
-      "urls": [],
-      "message": "Une nouvelle patchnote a été publiée !"
-    },
-    "status_changed": {
-      "urls": [],
-      "message": "Le statut de l'application a changé."
-    },
-    "new_day": {
-      "urls": [],
-      "message": "C'est l'heure du `!daily` ! (<#808432657838768168>)"
-    },
-    "item_changed": {
-      "urls": [],
-      "message": "Un item a été modifié !"
-    },
-    "new_item": {
-      "urls": [],
-      "message": "Un nouvel item a été ajouté !"
-    },
-    "pack_changed": {
-      "urls": [],
-      "message": "Un Pack a été modifié !"
-    },
-    "new_pack": {
-      "urls": [],
-      "message": "Un nouveau pack a été ajouté !"
-    },
-    "new_season": {
-      "urls": [],
-      "message": "Une nouvelle saison de l'ascension a démarré !"
-    },
-    "new_banner": {
-      "urls": [],
-      "message": "Une nouvelle bannière a été ajoutée !"
-    },
-    "banner_changed": {
-      "urls": [],
-      "message": "Une bannière a été modifiée !"
-    },
-    "new_event": {
-      "urls": [],
-      "message": "Un nouvel event a débuté !"
-    },
-    "event_changed": {
-      "urls": [],
-      "message": "Un event a été modifié"
-    },
-    "event_removed": {
-      "urls": [],
-      "message": "Un event s'est terminé."
-    }
+  "webhooks": [],
+  "messages": {
+    "config_changed": "Un paramètre de configuration a changé !",
+    "new_patchnote": "Une nouvelle patchnote a été publiée !",
+    "status_changed": "Le statut de l'application a changé.",
+    "new_day": "C'est l'heure du `!daily` ! (<#808432657838768168>)",
+    "item_changed": "Un item a été modifié !",
+    "new_item": "Un nouvel item a été ajouté !",
+    "pack_changed": "Un Pack a été modifié !",
+    "new_pack": "Un nouveau pack a été ajouté !",
+    "new_season": "Une nouvelle saison de l'ascension a démarré !",
+    "new_banner": "Une nouvelle bannière a été ajoutée !",
+    "banner_changed": "Une bannière a été modifiée !",
+    "new_event": "Un nouvel event a débuté !",
+    "event_changed": "Un event a été modifié",
+    "event_removed": "Un event s'est terminé."
   }
 }

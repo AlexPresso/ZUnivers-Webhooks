@@ -5,7 +5,7 @@ type WebhookFormData struct {
 	Username    string   `json:"username"`
 	AvatarURL   string   `json:"avatar_url"`
 	TTS         bool     `json:"tts"`
-	Embeds      []*Embed `json:"embeds"`
+	Embeds      *[]Embed `json:"embeds"`
 	PayloadJSON string   `json:"payload_json"`
 }
 

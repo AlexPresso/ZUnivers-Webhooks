@@ -25,9 +25,7 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
 
 - Install the package with `go install github.com/alexpresso/zunivers-webhooks@latest`
 - Open a CLI and run `zunivers-webhooks` to make it create a default config
-- Edit `config.json` and add
-  your [webhook endpoint(s)](https://support.discord.com/hc/fr/articles/228383668-Utiliser-les-Webhooks) URLs under the
-  needed events.
+- Edit `config.json` and add your [webhook endpoint(s)](https://support.discord.com/hc/fr/articles/228383668-Utiliser-les-Webhooks). You can add multiple webhook URLs to dilute the Discord rate limiting (number of message you can send per second) on multiple endpoints. I recommend you add at least 5.
 - Run `zunivers-webhooks` again and you're done.
 
 `config.json` example:

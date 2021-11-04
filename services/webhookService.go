@@ -50,6 +50,10 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 		offset := i * perWh
 		end := offset + perWh
 
+		if offset > len(formDatas) {
+			break
+		}
+
 		if end > len(formDatas) {
 			end = len(formDatas)
 		}

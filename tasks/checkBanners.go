@@ -3,11 +3,12 @@ package tasks
 import (
 	"github.com/alexpresso/zunivers-webhooks/services"
 	"github.com/alexpresso/zunivers-webhooks/structures"
+	"github.com/alexpresso/zunivers-webhooks/structures/discord"
 	"github.com/alexpresso/zunivers-webhooks/utils"
 	"gorm.io/gorm"
 )
 
-func checkBanners(db *gorm.DB) {
+func checkBanners(db *gorm.DB, embeds *[]discord.Embed) {
 	bannerEntries, err := services.FetchBanners()
 	if err != nil {
 		utils.Log("An error occurred while fetching bannerEntries: " + err.Error())
@@ -31,10 +32,10 @@ func checkBanners(db *gorm.DB) {
 			banner.ID = dbBanner.ID
 
 			if utils.AreDifferent(*dbBanner, *banner) {
-				services.DispatchEvent("banner_changed", *dbBanner, *banner)
+				*embeds = append(*embeds, *services.MakeEmbed("banner_changed", *dbBanner, *banner))
 			}
 		} else if len(dbBanners) > 0 {
-			services.DispatchEvent("new_banner", nil, *banner)
+			*embeds = append(*embeds, *services.MakeEmbed("new_banner", nil, *banner))
 		}
 
 		banners = append(banners, banner)

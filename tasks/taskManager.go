@@ -2,6 +2,7 @@ package tasks
 
 import (
 	"github.com/alexpresso/zunivers-webhooks/services"
+	"github.com/alexpresso/zunivers-webhooks/structures/discord"
 	"github.com/alexpresso/zunivers-webhooks/utils"
 	"github.com/go-co-op/gocron"
 	"gorm.io/gorm"
@@ -18,17 +19,27 @@ func ScheduleTasks(db *gorm.DB) {
 }
 
 func checkInfos(db *gorm.DB) {
-	checkStatus(db)
-	checkConfigs(db)
-	checkPatchnotes(db)
-	checkItems(db)
-	checkBanners(db)
-	checkEvents(db)
+	embeds := &[]discord.Embed{}
+
+	checkStatus(db, embeds)
+	checkConfigs(db, embeds)
+	checkPatchnotes(db, embeds)
+	checkItems(db, embeds)
+	checkBanners(db, embeds)
+	checkEvents(db, embeds)
 
 	utils.Log("Checked for infos.")
+
+	services.DispatchEmbeds(embeds)
 }
 
 func newDay(db *gorm.DB) {
-	services.DispatchEvent("new_day", nil, nil)
-	checkSeason(db)
+	utils.Log("New day")
+
+	var embeds = &[]discord.Embed{
+		*services.MakeEmbed("new_day", nil, nil),
+	}
+
+	checkSeason(db, embeds)
+	services.DispatchEmbeds(embeds)
 }

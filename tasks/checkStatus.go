@@ -3,11 +3,12 @@ package tasks
 import (
 	"github.com/alexpresso/zunivers-webhooks/services"
 	"github.com/alexpresso/zunivers-webhooks/structures"
+	"github.com/alexpresso/zunivers-webhooks/structures/discord"
 	"github.com/alexpresso/zunivers-webhooks/utils"
 	"gorm.io/gorm"
 )
 
-func checkStatus(db *gorm.DB) {
+func checkStatus(db *gorm.DB, embeds *[]discord.Embed) {
 	status, err := services.FetchStatus()
 	if err != nil {
 		utils.Log("An error occurred while fetching status: " + err.Error())
@@ -19,7 +20,7 @@ func checkStatus(db *gorm.DB) {
 		status.ID = currStatus.ID
 
 		if utils.AreDifferent(currStatus, status) {
-			services.DispatchEvent("status_changed", currStatus, status)
+			*embeds = append(*embeds, *services.MakeEmbed("status_changed", currStatus, status))
 		}
 	}
 

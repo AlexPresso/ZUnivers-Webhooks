@@ -19,7 +19,7 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
 - ✅ Notify for new banners/banners changes
 - ✅ Notify for new "ascension" season
 - ✅ Notify for new event/events changes
-- ✅ Per event multiple webhook dispatching
+- ✅ Multiple webhooks dispatching
 
 ## Usage
 
@@ -30,15 +30,21 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
   needed events.
 - Run `zunivers-webhooks` again and you're done.
 
-`config.json` example for the `config_changed` event:
+`config.json` example:
 
 ```json
 {
-  "config_changed": {
-    "urls": [
-      "https://discord.com/api/webhooks/123456789/........."
-    ],
-    "message": "Un paramètre de configuration a changé !"
+  "frontBaseUrl": "https://zunivers.zerator.com",
+  "cdnBaseUrl": "https://minio-zunivers-prod.prod.poneyy.fr/zunivers-prod",
+  "api": {
+    "baseUrl": "https://zunivers-api.zerator.com",
+    "timeout": 10
+  },
+  "webhooks": [
+    "https://discord.com/api/webhooks/123456789/........."
+  ],
+  "messages": {
+    ...
   }
 }
 ```

@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"github.com/alexpresso/zunivers-webhooks/services"
 	"github.com/alexpresso/zunivers-webhooks/structures"
+	"github.com/alexpresso/zunivers-webhooks/structures/discord"
 	"github.com/alexpresso/zunivers-webhooks/utils"
 	"gorm.io/gorm"
 )
 
-func checkConfigs(db *gorm.DB) {
+func checkConfigs(db *gorm.DB, embeds *[]discord.Embed) {
 	configs, err := services.FetchConfigs()
 	if err != nil {
 		utils.Log("An error occurred while fetching configs: " + err.Error())
@@ -31,10 +32,10 @@ func checkConfigs(db *gorm.DB) {
 			config.ID = dbConfig.ID
 
 			if utils.AreDifferent(*dbConfig, *config) {
-				services.DispatchEvent("config_changed", *dbConfig, *config)
+				*embeds = append(*embeds, *services.MakeEmbed("config_changed", *dbConfig, *config))
 			}
 		} else if len(dbConfigs) > 0 {
-			services.DispatchEvent("config_changed", nil, *config)
+			*embeds = append(*embeds, *services.MakeEmbed("config_changed", nil, *config))
 		}
 	}
 

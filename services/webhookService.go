@@ -12,24 +12,46 @@ import (
 	"strings"
 )
 
-func DispatchEvent(event string, oldObject, newObject interface{}) {
-	body, _ := json.Marshal(makeFormData(event, oldObject, newObject))
-
-	for _, url := range viper.GetStringSlice(fmt.Sprintf("webhooks.%s.urls", event)) {
-		url := url
-
-		res, err := http.Post(fmt.Sprintf("%s?wait=true", url), "application/json", bytes.NewBuffer(body))
-		if err != nil {
-			utils.Log(fmt.Sprintf("Failed to dispatch %s event", event))
-		}
-
-		fmt.Println(res)
+func DispatchEmbeds(embeds *[]discord.Embed) {
+	if len(*embeds) == 0 {
+		return
 	}
 
-	utils.Log("Dispatched event: " + event)
+	for i := 0; i < len(*embeds); i += 10 {
+		end := i + 10
+		if end > len(*embeds) {
+			end = len(*embeds)
+		}
+
+		formData := &discord.WebhookFormData{
+			Username:  "ZUnivers-Webhooks",
+			AvatarURL: viper.GetString("frontBaseUrl") + "/img/logo-mini.aea51074.png",
+			Embeds:    &[]discord.Embed{},
+		}
+
+		for _, embed := range (*embeds)[i:end] {
+			embed := embed
+			*formData.Embeds = append(*formData.Embeds, embed)
+		}
+
+		body, _ := json.Marshal(formData)
+
+		for _, url := range viper.GetStringSlice("webhooks") {
+			url := url
+
+			res, err := http.Post(fmt.Sprintf("%s?wait=true", url), "application/json", bytes.NewBuffer(body))
+			if err != nil {
+				utils.Log(fmt.Sprintf("Failed to dispatch to: %s", url))
+			}
+
+			fmt.Println(res)
+		}
+	}
+
+	utils.Log("Dispatched embeds.")
 }
 
-func makeFormData(event string, oldObject, newObject interface{}) *discord.WebhookFormData {
+func MakeEmbed(event string, oldObject, newObject interface{}) *discord.Embed {
 	embed := &discord.Embed{
 		Title:       "",
 		Type:        "rich",
@@ -44,11 +66,7 @@ func makeFormData(event string, oldObject, newObject interface{}) *discord.Webho
 
 	fillEmbed(embed, oldObject, newObject)
 
-	return &discord.WebhookFormData{
-		Username:  "ZUnivers-Webhooks",
-		AvatarURL: viper.GetString("frontBaseUrl") + "/img/logo-mini.aea51074.png",
-		Embeds:    []*discord.Embed{embed},
-	}
+	return embed
 }
 
 func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {

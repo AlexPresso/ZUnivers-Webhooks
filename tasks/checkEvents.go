@@ -3,11 +3,12 @@ package tasks
 import (
 	"github.com/alexpresso/zunivers-webhooks/services"
 	"github.com/alexpresso/zunivers-webhooks/structures"
+	"github.com/alexpresso/zunivers-webhooks/structures/discord"
 	"github.com/alexpresso/zunivers-webhooks/utils"
 	"gorm.io/gorm"
 )
 
-func checkEvents(db *gorm.DB) {
+func checkEvents(db *gorm.DB, embeds *[]discord.Embed) {
 	events, err := services.FetchEvents()
 	if err != nil {
 		utils.Log("An error occurred while fetching events: " + err.Error())
@@ -35,10 +36,10 @@ func checkEvents(db *gorm.DB) {
 			event.ID = dbEvent.ID
 
 			if utils.AreDifferent(*event, *dbEvent) {
-				services.DispatchEvent("event_changed", *dbEvent, *event)
+				*embeds = append(*embeds, *services.MakeEmbed("event_changed", *dbEvent, *event))
 			}
 		} else if len(dbEvents) > 0 {
-			services.DispatchEvent("new_event", nil, *event)
+			*embeds = append(*embeds, *services.MakeEmbed("new_event", nil, *event))
 		}
 	}
 
@@ -48,7 +49,7 @@ func checkEvents(db *gorm.DB) {
 		event := event
 		if eventsMap[event.EventID] == nil {
 			db.Delete(&event)
-			services.DispatchEvent("event_removed", nil, event)
+			*embeds = append(*embeds, *services.MakeEmbed("event_removed", nil, event))
 		}
 	}
 }

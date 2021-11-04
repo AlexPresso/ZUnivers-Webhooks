@@ -17,6 +17,7 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 		return
 	}
 
+	var formDatas []*discord.WebhookFormData
 	for i := 0; i < len(*embeds); i += 10 {
 		end := i + 10
 		if end > len(*embeds) {
@@ -34,10 +35,28 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 			*formData.Embeds = append(*formData.Embeds, embed)
 		}
 
-		body, _ := json.Marshal(formData)
+		formDatas = append(formDatas, formData)
+	}
 
-		for _, url := range viper.GetStringSlice("webhooks") {
-			url := url
+	urls := viper.GetStringSlice("webhooks")
+	perWh := (len(formDatas) / len(urls)) + 1
+
+	if perWh > 5 {
+		utils.Log("Too much messages to send, please add one ore more new webhooks URLS.")
+	}
+
+	for i := 0; i < len(urls); i++ {
+		url := urls[i]
+		offset := i * perWh
+		end := offset + perWh
+
+		if end > len(formDatas) {
+			end = len(formDatas)
+		}
+
+		for _, formData := range formDatas[offset:end] {
+			formData := &formData
+			body, _ := json.Marshal(formData)
 
 			res, err := http.Post(fmt.Sprintf("%s?wait=true", url), "application/json", bytes.NewBuffer(body))
 			if err != nil {

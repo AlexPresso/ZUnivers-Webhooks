@@ -40,7 +40,7 @@ func checkItems(db *gorm.DB, embeds *[]discord.Embed) {
 			if utils.AreDifferent(*item, *dbItem) {
 				*embeds = append(*embeds, *services.MakeEmbed("item_changed", *dbItem, *item))
 			}
-		} else /*if len(dbItems) > 0*/ {
+		} else if len(dbItems) > 0 {
 			*embeds = append(*embeds, *services.MakeEmbed("new_item", nil, *item))
 		}
 	}

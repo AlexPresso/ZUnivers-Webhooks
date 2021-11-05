@@ -78,7 +78,7 @@ func MakeEmbed(event string, oldObject, newObject interface{}) *discord.Embed {
 	embed := &discord.Embed{
 		Title:       "",
 		Type:        "rich",
-		Description: viper.GetString(fmt.Sprintf("webhooks.%s.message", event)),
+		Description: viper.GetString(fmt.Sprintf("messages.%s", event)),
 		Color:       374272,
 		Author: &discord.Author{
 			Name:    "ZUnivers",

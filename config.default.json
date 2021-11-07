@@ -20,6 +20,10 @@
     "banner_changed": "Une bannière a été modifiée !",
     "new_event": "Un nouvel event a débuté !",
     "event_changed": "Un event a été modifié",
-    "event_removed": "Un event s'est terminé."
+    "event_removed": "Un event s'est terminé.",
+    "new_achievement_category": "Une catégorie de succès a été ajoutée.",
+    "achievement_category_changed": "Une catégorie de succès a été modifiée.",
+    "new_achievement": "Un succès a été ajouté.",
+    "achievement_changed": "Un succès a été modifié."
   }
 }

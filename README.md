@@ -19,13 +19,17 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
 - ✅ Notify for new banners/banners changes
 - ✅ Notify for new "ascension" season
 - ✅ Notify for new event/events changes
+- ✅ Notify for new achievements/achievements changes
 - ✅ Multiple webhooks dispatching
 
 ## Usage
 
 - Install the package with `go install github.com/alexpresso/zunivers-webhooks@latest`
 - Open a CLI and run `zunivers-webhooks` to make it create a default config
-- Edit `config.json` and add your [webhook endpoint(s)](https://support.discord.com/hc/fr/articles/228383668-Utiliser-les-Webhooks). You can add multiple webhook URLs to dilute the Discord rate limiting (number of message you can send per second) on multiple endpoints. I recommand you add at least 5.
+- Edit `config.json` and add
+  your [webhook endpoint(s)](https://support.discord.com/hc/fr/articles/228383668-Utiliser-les-Webhooks). You can add
+  multiple webhook URLs to dilute the Discord rate limiting (number of message you can send per second) on multiple
+  endpoints. I recommand you add at least 5.
 - Run `zunivers-webhooks` again and you're done.
 
 `config.json` example:

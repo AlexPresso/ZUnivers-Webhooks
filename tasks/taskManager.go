@@ -27,6 +27,7 @@ func checkInfos(db *gorm.DB) {
 	checkItems(db, embeds)
 	checkBanners(db, embeds)
 	checkEvents(db, embeds)
+	checkAchievementCategories(db, embeds)
 
 	utils.Log("Checked for infos.")
 

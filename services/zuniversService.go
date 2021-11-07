@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/alexpresso/zunivers-webhooks/structures"
 	"github.com/alexpresso/zunivers-webhooks/utils"
+	"net/url"
 )
 
 func FetchConfigs() (configs []structures.Config, err error) {
@@ -42,5 +43,20 @@ func FetchBanners() (banners []structures.BannerInventoryEntry, err error) {
 
 func FetchEvents() (events []structures.Event, err error) {
 	err = utils.Request("/public/event", "GET", nil, &events)
+	return
+}
+
+func FetchUserDetail(discordTag string) (detail structures.UserDetail, err error) {
+	err = utils.Request("/public/user/"+url.QueryEscape(discordTag), "GET", nil, &detail)
+	return
+}
+
+func FetchAchievementCategories() (categories []structures.AchievementCategory, err error) {
+	detail, err := FetchUserDetail("Alex'Presso#5480")
+	return detail.AchievementCategories, err
+}
+
+func FetchAchievements(categoryId string) (achProgress []structures.AchievementProgress, err error) {
+	err = utils.Request("/public/achievement/Alex'Presso%235480/"+categoryId, "GET", nil, &achProgress)
 	return
 }

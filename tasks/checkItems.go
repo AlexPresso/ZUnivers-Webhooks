@@ -14,6 +14,11 @@ func checkItems(db *gorm.DB, embeds *[]discord.Embed) {
 		utils.Log("An error occurred while fetching items: " + err.Error())
 		return
 	}
+	itemsMap := make(map[string]*structures.Item)
+	for _, item := range items {
+		item := item
+		itemsMap[item.ItemID] = &item
+	}
 
 	packs := checkPacks(db, embeds)
 	packsMap := make(map[string]*structures.Pack)
@@ -46,4 +51,12 @@ func checkItems(db *gorm.DB, embeds *[]discord.Embed) {
 	}
 
 	db.Save(&items)
+
+	for _, item := range dbItems {
+		item := item
+		if itemsMap[item.ItemID] == nil {
+			db.Delete(&item)
+			*embeds = append(*embeds, *services.MakeEmbed("item_removed", nil, item))
+		}
+	}
 }

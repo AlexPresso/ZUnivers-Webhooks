@@ -6,7 +6,6 @@ import (
 	"github.com/alexpresso/zunivers-webhooks/structures/discord"
 	"github.com/alexpresso/zunivers-webhooks/utils"
 	"gorm.io/gorm"
-	"time"
 )
 
 func checkSeason(db *gorm.DB, embeds *[]discord.Embed) {
@@ -20,7 +19,7 @@ func checkSeason(db *gorm.DB, embeds *[]discord.Embed) {
 	if res := db.Last(&dbSeason); res.Error == nil {
 		season.ID = dbSeason.ID
 
-		if (!time.Time(*dbSeason.StartDate).Equal(time.Time(*season.StartDate))) || (!time.Time(*dbSeason.EndDate).Equal(time.Time(*season.EndDate))) {
+		if utils.AreDifferent(dbSeason, season) {
 			*embeds = append(*embeds, *services.MakeEmbed("new_season", dbSeason, season))
 		}
 	}

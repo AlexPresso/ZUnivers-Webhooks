@@ -13,7 +13,7 @@ func ScheduleTasks(db *gorm.DB) {
 	s := gocron.NewScheduler(time.Local)
 
 	_, _ = s.Every(20).Minutes().Do(checkInfos, db)
-	_, _ = s.Every(1).Days().At("00:01").Do(newDay, db)
+	_, _ = s.Every(1).Days().At("00:01").Do(newDay)
 
 	s.StartBlocking()
 }
@@ -28,19 +28,17 @@ func checkInfos(db *gorm.DB) {
 	checkBanners(db, embeds)
 	checkEvents(db, embeds)
 	checkAchievementCategories(db, embeds)
+	checkSeason(db, embeds)
 
 	utils.Log("Checked for infos.")
 
 	services.DispatchEmbeds(embeds)
 }
 
-func newDay(db *gorm.DB) {
+func newDay() {
 	utils.Log("New day")
 
-	var embeds = &[]discord.Embed{
+	services.DispatchEmbeds(&[]discord.Embed{
 		*services.MakeEmbed("new_day", nil, nil),
-	}
-
-	checkSeason(db, embeds)
-	services.DispatchEmbeds(embeds)
+	})
 }

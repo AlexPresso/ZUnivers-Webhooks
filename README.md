@@ -29,7 +29,7 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
 - Edit `config.json` and add
   your [webhook endpoint(s)](https://support.discord.com/hc/fr/articles/228383668-Utiliser-les-Webhooks). You can add
   multiple webhook URLs to dilute the Discord rate limiting (number of message you can send per second) on multiple
-  endpoints. I recommand you add at least 5.
+  endpoints. I recommend you add at least 5.
 - Run `zunivers-webhooks` again and you're done.
 
 `config.json` example:

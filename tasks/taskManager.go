@@ -29,6 +29,7 @@ func checkInfos(db *gorm.DB) {
 	checkEvents(db, embeds)
 	checkAchievementCategories(db, embeds)
 	checkSeason(db, embeds)
+	checkChallenges(db, embeds)
 
 	utils.Log("Checked for infos.")
 

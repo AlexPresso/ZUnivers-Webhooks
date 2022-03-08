@@ -152,7 +152,13 @@ func processDisplay(field *discord.EmbedField, oldValue, newValue interface{}, p
 		}
 	}
 
-	field.Value += fmt.Sprintf("__%s:__ %s`%s`\n", parts[1], oldValueText, fmt.Sprint(newValue))
+	split := strings.Split(parts[1], "|")
+	format := "%s"
+	if len(split) > 1 {
+		format = split[1]
+	}
+
+	field.Value += fmt.Sprintf("__%s:__ %s`%s`\n", split[0], fmt.Sprintf(format, oldValueText), fmt.Sprintf(format, newValue))
 }
 
 func processImage(embed *discord.Embed, newValue interface{}, parts []string) {

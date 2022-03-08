@@ -60,3 +60,8 @@ func FetchAchievements(categoryId string) (achProgress []structures.AchievementP
 	err = utils.Request("/public/achievement/Alex'Presso%235480/"+categoryId, "GET", nil, &achProgress)
 	return
 }
+
+func FetchChallenges() (chProgress []structures.ChallengeProgress, err error) {
+	err = utils.Request("/public/challenge", "GET", nil, &chProgress)
+	return
+}

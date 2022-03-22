@@ -15,8 +15,15 @@ func checkChallenges(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	dbChallengesMap := make(map[string]*structures.Challenge)
 	var challenges []*structures.Challenge
+	var dbChallenges []structures.Challenge
+	dbChallengesMap := make(map[string]*structures.Challenge)
+
+	db.Find(&dbChallenges)
+	for _, chall := range dbChallenges {
+		chall := chall
+		dbChallengesMap[chall.ChallengeID] = &chall
+	}
 
 	for i := 0; i < len(chProgress); i++ {
 		challenge := &chProgress[i].Challenge

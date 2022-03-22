@@ -9,8 +9,8 @@ type Patchnote struct {
 
 	PatchnoteID string    `json:"id"`
 	Title       string    `json:"title" zu:"display=Titre"`
-	CreatedBy   string    `json:"createdBy" zu:"display=Auteur"`
+	CreatedBy   string    `json:"createdBy" zu:"display=Auteur|<@%s>"`
 	Date        *DateTime `json:"date" zu:"display=Date"`
 	ImageUrl    string    `json:"imageUrl" zu:"imageUrl=%s"`
-	Slug        string    `json:"slug" zu:"url=/post/%s"`
+	Slug        string    `json:"slug" zu:"url=/actu/%s"`
 }

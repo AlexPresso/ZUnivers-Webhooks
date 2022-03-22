@@ -9,12 +9,12 @@ type Item struct {
 	Genre  string `json:"genre" zu:"display=Genre"`
 	Name   string `json:"name" zu:"display=Nom"`
 	Rarity uint32 `json:"rarity" zu:"display=Rareté"`
-	Slug   string `json:"slug" zu:"url=/item/%s"`
+	Slug   string `json:"slug" zu:"url=/carte/%s"`
 }
 
 type Pack struct {
 	gorm.Model
 
 	PackID string `json:"id"`
-	Name   string `json:"name" zu:"display=Nom"`
+	Name   string `json:"name" zu:"display=Nom;url=/catalogue/%s"`
 }

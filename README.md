@@ -11,15 +11,16 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
 ## Features
 
 - ✅ `!daily` reminder
-- ✅ Notify for new patchnotes
-- ✅ Notify for configuration changes
-- ✅ Notify for new webapp versions
-- ✅ Notify for new items/item changes
-- ✅ Notify for new packs/packs changes
-- ✅ Notify for new banners/banners changes
-- ✅ Notify for new "ascension" season
-- ✅ Notify for new event/events changes
-- ✅ Notify for new achievements/achievements changes
+- ✅ Notifies for new patchnotes
+- ✅ Notifies for configuration changes
+- ✅ Notifies for new webapp versions
+- ✅ Notifies for new items/item changes
+- ✅ Notifies for new packs/packs changes
+- ✅ Notifies for new banners/banners changes
+- ✅ Notifies for new "ascension" season
+- ✅ Notifies for new event/events changes
+- ✅ Notifies for new achievements/achievements changes
+- ✅ Notifies for new challenges
 - ✅ Multiple webhooks dispatching
 
 ## Usage

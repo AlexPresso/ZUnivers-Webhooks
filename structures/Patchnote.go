@@ -12,5 +12,5 @@ type Patchnote struct {
 	CreatedBy   string    `json:"createdBy" zu:"display=Auteur|<@%s>"`
 	Date        *DateTime `json:"date" zu:"display=Date"`
 	ImageUrl    string    `json:"imageUrl" zu:"imageUrl=%s"`
-	Slug        string    `json:"slug" zu:"url=/post/%s"`
+	Slug        string    `json:"slug" zu:"url=/actu/%s"`
 }

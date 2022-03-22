@@ -141,18 +141,25 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 }
 
 func processDisplay(field *discord.EmbedField, oldValue, newValue interface{}, parts []string) {
+	split := strings.Split(parts[1], "|")
+	format := "`%v`"
+	if len(split) > 1 {
+		format = split[1]
+	}
+
 	oldValueText := ""
 	if oldValue != nil {
 		if utils.IsTime(oldValue) {
 			if utils.TimeDifference(oldValue, newValue) {
-				oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprint(oldValue))
+				oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprintf(format, oldValue))
 			}
 		} else if oldValue != newValue {
-			oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprint(oldValue))
+			oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprintf(format, oldValue))
 		}
 	}
 
-	field.Value += fmt.Sprintf("__%s:__ %s`%s`\n", parts[1], oldValueText, fmt.Sprint(newValue))
+	value := fmt.Sprintf("__%s:__ %s%s\n", split[0], oldValueText, fmt.Sprintf(format, newValue))
+	field.Value += value
 }
 
 func processImage(embed *discord.Embed, newValue interface{}, parts []string) {

@@ -33,6 +33,10 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
   endpoints. I recommend you add at least 5.
 - Run `zunivers-webhooks` again and you're done.
 
+Note: you can also deploy zunivers-webhooks to a kubernetes cluster using the
+following [helm chart](https://github.com/AlexPresso/helm.alexpresso.me/tree/main/charts/zunivers-webhooks)
+
+
 `config.json` example:
 
 ```json

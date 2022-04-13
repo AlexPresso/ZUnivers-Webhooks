@@ -8,6 +8,7 @@ type Item struct {
 	ItemID string `json:"id" zu:"imageUrl=/item/%s-false"`
 	Genre  string `json:"genre" zu:"display=Genre"`
 	Name   string `json:"name" zu:"display=Nom"`
+	Year   string `json:"year" zu:"display=Année"`
 	Rarity uint32 `json:"rarity" zu:"display=Rareté"`
 	Slug   string `json:"slug" zu:"url=/carte/%s"`
 }

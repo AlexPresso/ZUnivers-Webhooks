@@ -65,9 +65,8 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 			res, err := http.Post(fmt.Sprintf("%s?wait=true", url), "application/json", bytes.NewBuffer(body))
 			if err != nil {
 				utils.Log(fmt.Sprintf("Failed to dispatch to: %s", url))
+				fmt.Println(res)
 			}
-
-			fmt.Println(res)
 		}
 	}
 
@@ -103,6 +102,7 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 
 	newType := reflect.TypeOf(newObject)
 	newObject = reflect.ValueOf(newObject)
+	url := ""
 	embedField := &discord.EmbedField{
 		Name:   "Détails",
 		Value:  "",
@@ -130,12 +130,15 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 					processImage(embed, newValue, part)
 					break
 				case "url":
-					fullUrl := viper.GetString("frontBaseUrl") + fmt.Sprintf(part[1], newValue)
-					embedField.Value += fmt.Sprintf("\n[Page de l'entité](%s)", strings.ReplaceAll(fullUrl, " ", "-"))
+					url = viper.GetString("frontBaseUrl") + fmt.Sprintf(part[1], newValue)
 					break
 				}
 			}
 		}
+	}
+
+	if url != "" {
+		embedField.Value += fmt.Sprintf("\n[Page de l'entité](%s)", strings.ReplaceAll(url, " ", "-"))
 	}
 
 	embed.Fields = []*discord.EmbedField{embedField}

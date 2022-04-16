@@ -6,5 +6,5 @@ import (
 )
 
 func Log(message string) {
-	fmt.Printf("[%s] : %s\n", time.Now().Format("01.02.2006 - 15:04:05"), message)
+	fmt.Printf("[%s] : %s\n", time.Now().Format("02.01.2006 - 15:04:05"), message)
 }

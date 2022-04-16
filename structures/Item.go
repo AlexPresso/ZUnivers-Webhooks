@@ -17,4 +17,5 @@ type Pack struct {
 
 	PackID string `json:"id"`
 	Name   string `json:"name" zu:"display=Nom;url=/catalogue/%s"`
+	Year   uint32 `json:"year" zu:"display=Année"`
 }

@@ -42,7 +42,7 @@ func FetchBanners() (banners []structures.BannerInventoryEntry, err error) {
 }
 
 func FetchEvents() (events []structures.Event, err error) {
-	err = utils.Request("/public/event", "GET", nil, &events)
+	err = utils.Request("/public/event/current", "GET", nil, &events)
 	return
 }
 

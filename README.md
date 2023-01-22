@@ -21,6 +21,7 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
 - ✅ Notifies for new event/events changes
 - ✅ Notifies for new achievements/achievements changes
 - ✅ Notifies for new challenges
+- ✅ Notifies for shop changes
 - ✅ Multiple webhooks dispatching
 
 ## Usage

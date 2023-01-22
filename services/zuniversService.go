@@ -65,3 +65,8 @@ func FetchChallenges() (chProgress []structures.ChallengeProgress, err error) {
 	err = utils.Request("/public/challenge", "GET", nil, &chProgress)
 	return
 }
+
+func FetchShop() (entries []structures.ShopEntry, err error) {
+	err = utils.Request("/public/shop", "GET", nil, &entries)
+	return
+}

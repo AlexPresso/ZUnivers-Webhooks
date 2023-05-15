@@ -11,7 +11,7 @@ import (
 func checkSeason(db *gorm.DB, embeds *[]discord.Embed) {
 	season, err := services.FetchCurrentSeason()
 	if err != nil {
-		utils.Log("An error occurred while fetch current season: " + err.Error())
+		utils.Log("An error occurred while fetching current season: " + err.Error())
 		return
 	}
 

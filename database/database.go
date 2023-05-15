@@ -28,6 +28,7 @@ func Init() (db *gorm.DB) {
 		&structures.AchievementCategory{},
 		&structures.Achievement{},
 		&structures.Challenge{},
+		&structures.ShopEntry{},
 	)
 
 	if err != nil {

@@ -73,11 +73,13 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 	utils.Log("Dispatched embeds.")
 }
 
-func MakeEmbed(event string, oldObject, newObject interface{}) *discord.Embed {
-	embed := &discord.Embed{
+func DefaultEmbed(event string, placeholder string) *discord.Embed {
+	description := viper.GetString(fmt.Sprintf("messages.%s", event))
+
+	return &discord.Embed{
 		Title:       "",
 		Type:        "rich",
-		Description: viper.GetString(fmt.Sprintf("messages.%s", event)),
+		Description: fmt.Sprintf(description, placeholder),
 		Color:       374272,
 		Author: &discord.Author{
 			Name:    "ZUnivers",
@@ -85,7 +87,10 @@ func MakeEmbed(event string, oldObject, newObject interface{}) *discord.Embed {
 			URL:     viper.GetString("frontBaseUrl"),
 		},
 	}
+}
 
+func MakeEmbed(event string, oldObject, newObject interface{}) *discord.Embed {
+	embed := DefaultEmbed(event, "")
 	fillEmbed(embed, oldObject, newObject)
 
 	return embed

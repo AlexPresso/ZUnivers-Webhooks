@@ -28,6 +28,7 @@
     "new_achievement": "Un succès a été ajouté.",
     "achievement_changed": "Un succès a été modifié.",
     "challenge_changed": "Un challenge a été modifié.",
-    "new_challenge": "Un nouveau challenge a débuté3"
+    "new_challenge": "Un nouveau challenge a débuté3",
+    "shop_changed": "De nouveaux objets sont disponibles dans mon [magasin](%s) !"
   }
 }

@@ -47,7 +47,7 @@ func checkShopEntries(db *gorm.DB, embeds *[]discord.Embed) {
 func makeShopEmbed(entries []structures.ShopEntry) *discord.Embed {
 	frontBaseUrl := viper.GetString("frontBaseUrl")
 
-	embed := services.DefaultEmbed("shop_changed", fmt.Sprintf("%s/magasin", frontBaseUrl))
+	embed := services.DefaultEmbed("shop_changed", fmt.Sprintf("%s/echoppe", frontBaseUrl))
 	namesField := &discord.EmbedField{
 		Name:   "Items",
 		Value:  "",
@@ -76,9 +76,6 @@ func makeShopEmbed(entries []structures.ShopEntry) *discord.Embed {
 	}
 
 	embed.Fields = []*discord.EmbedField{namesField, raritiesField, pricesField}
-	embed.Thumbnail = &discord.EmbedMedia{
-		Url: fmt.Sprintf("%s/%s", frontBaseUrl, "img/shopkeeper.6f371f8a.png"),
-	}
 
 	return embed
 }

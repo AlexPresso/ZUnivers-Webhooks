@@ -76,10 +76,14 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 func DefaultEmbed(event string, placeholder string) *discord.Embed {
 	description := viper.GetString(fmt.Sprintf("messages.%s", event))
 
+	if strings.Contains(description, "%s") {
+		description = fmt.Sprintf(description, placeholder)
+	}
+
 	return &discord.Embed{
 		Title:       "",
 		Type:        "rich",
-		Description: fmt.Sprintf(description, placeholder),
+		Description: description,
 		Color:       374272,
 		Author: &discord.Author{
 			Name:    "ZUnivers",

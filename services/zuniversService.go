@@ -37,7 +37,7 @@ func FetchPatchnotes() (patchnotes []structures.Patchnote, err error) {
 }
 
 func FetchBanners() (banners []structures.BannerInventoryEntry, err error) {
-	err = utils.Request("/public/banner/ZeratoR%231337", "GET", nil, &banners)
+	err = utils.Request("/public/banner/zerator", "GET", nil, &banners)
 	return
 }
 
@@ -52,12 +52,12 @@ func FetchUserDetail(discordTag string) (detail structures.UserDetail, err error
 }
 
 func FetchAchievementCategories() (categories []structures.AchievementCategory, err error) {
-	detail, err := FetchUserDetail("Alex'Presso#5480")
+	detail, err := FetchUserDetail("alexpresso")
 	return detail.AchievementCategories, err
 }
 
 func FetchAchievements(categoryId string) (achProgress []structures.AchievementProgress, err error) {
-	err = utils.Request("/public/achievement/Alex'Presso%235480/"+categoryId, "GET", nil, &achProgress)
+	err = utils.Request("/public/achievement/alexpresso/"+categoryId, "GET", nil, &achProgress)
 	return
 }
 

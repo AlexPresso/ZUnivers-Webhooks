@@ -9,5 +9,6 @@ type Config struct {
 	CraftValue   int    `json:"craftValue" zu:"display=Valeur de craft"`
 	IsGolden     bool   `json:"isGolden" zu:"display=Gold"`
 	Rarity       int    `json:"rarity" zu:"display=Rareté"`
+	ShinyLevel   int    `json:"shinyLevel" zu:"display=Shiny"`
 	RecycleValue int    `json:"recycleValue" zu:"display=Valeur de recyclage"`
 }

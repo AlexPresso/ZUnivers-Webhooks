@@ -21,12 +21,12 @@ func checkConfigs(db *gorm.DB, embeds *[]discord.Embed) {
 	dbConfigMap := make(map[string]*structures.Config)
 	for _, config := range dbConfigs {
 		config := config
-		dbConfigMap[fmt.Sprintf("%d:%t", config.Rarity, config.IsGolden)] = &config
+		dbConfigMap[fmt.Sprintf("%d:%d:%t", config.ShinyLevel, config.Rarity, config.IsGolden)] = &config
 	}
 
 	for i := 0; i < len(configs); i++ {
 		config := &configs[i]
-		dbConfig := dbConfigMap[fmt.Sprintf("%d:%t", config.Rarity, config.IsGolden)]
+		dbConfig := dbConfigMap[fmt.Sprintf("%d:%d:%t", config.ShinyLevel, config.Rarity, config.IsGolden)]
 
 		if dbConfig != nil {
 			config.ID = dbConfig.ID

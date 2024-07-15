@@ -6,29 +6,98 @@
     "timeout": 10
   },
   "webhooks": [],
-  "messages": {
-    "config_changed": "Un paramètre de configuration a changé !",
-    "new_patchnote": "Une nouvelle patchnote a été publiée !",
-    "status_changed": "Le statut de l'application a changé.",
-    "new_day": "C'est l'heure du `!daily` ! (<#808432657838768168>)",
-    "item_changed": "Un item a été modifié !",
-    "new_item": "Un nouvel item a été ajouté !",
-    "item_removed": "Un item a été supprimé",
-    "pack_changed": "Un Pack a été modifié !",
-    "new_pack": "Un nouveau pack a été ajouté !",
-    "pack_removed": "Un pack a été supprimé.",
-    "new_season": "Une nouvelle saison de l'ascension a démarré !",
-    "new_banner": "Une nouvelle bannière a été ajoutée !",
-    "banner_changed": "Une bannière a été modifiée !",
-    "new_event": "Un nouvel event a débuté !",
-    "event_changed": "Un event a été modifié3",
-    "event_removed": "Un event s'est terminé.",
-    "new_achievement_category": "Une catégorie de succès a été ajoutée.",
-    "achievement_category_changed": "Une catégorie de succès a été modifiée.",
-    "new_achievement": "Un succès a été ajouté.",
-    "achievement_changed": "Un succès a été modifié.",
-    "challenge_changed": "Un challenge a été modifié.",
-    "new_challenge": "Un nouveau challenge a débuté3",
-    "shop_changed": "De nouveaux objets sont disponibles dans mon [magasin](%s) !"
+  "events": {
+    "config_changed": {
+      "role": "",
+      "message": "Un paramètre de configuration a changé !"
+    },
+    "new_patchnote": {
+      "role": "",
+      "message": "Une nouvelle patchnote a été publiée !"
+    },
+    "status_changed": {
+      "role": "",
+      "message": "Le statut de l'application a changé."
+    },
+    "new_day": {
+      "role": "",
+      "message": "C'est l'heure du `!daily` ! (<#808432657838768168>)"
+    },
+    "item_changed": {
+      "role": "",
+      "message": "Un item a été modifié !"
+    },
+    "new_item": {
+      "role": "",
+      "message": "Un nouvel item a été ajouté !"
+    },
+    "item_removed": {
+      "role": "",
+      "message": "Un item a été supprimé"
+    },
+    "pack_changed": {
+      "role": "",
+      "message": "Un Pack a été modifié !"
+    },
+    "new_pack": {
+      "role": "",
+      "message": "Un nouveau pack a été ajouté !"
+    },
+    "pack_removed": {
+      "role": "",
+      "message": "Un pack a été supprimé."
+    },
+    "new_season": {
+      "role": "",
+      "message": "Une nouvelle saison de l'ascension a démarré !"
+    },
+    "new_banner": {
+      "role": "",
+      "message": "Une nouvelle bannière a été ajoutée !"
+    },
+    "banner_changed": {
+      "role": "",
+      "message": "Une bannière a été modifiée !"
+    },
+    "new_event": {
+      "role": "",
+      "message": "Un nouvel event a débuté !"
+    },
+    "event_changed": {
+      "role": "",
+      "message": "Un event a été modifié"
+    },
+    "event_removed": {
+      "role": "",
+      "message": "Un event s'est terminé."
+    },
+    "new_achievement_category": {
+      "role": "",
+      "message": "Une catégorie de succès a été ajoutée."
+    },
+    "achievement_category_changed": {
+      "role": "",
+      "message": "Une catégorie de succès a été modifiée."
+    },
+    "new_achievement": {
+      "role": "",
+      "message": "Un succès a été ajouté."
+    },
+    "achievement_changed": {
+      "role": "",
+      "message": "Un succès a été modifié."
+    },
+    "challenge_changed": {
+      "role": "",
+      "message": "Un challenge a été modifié."
+    },
+    "new_challenge": {
+      "role": "",
+      "message": "Un nouveau challenge a débuté"
+    },
+    "shop_changed": {
+      "role": "",
+      "message": "De nouveaux objets sont disponibles dans mon [magasin](%s) !"
+    }
   }
 }

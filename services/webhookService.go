@@ -30,9 +30,18 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 			Embeds:    &[]discord.Embed{},
 		}
 
+		ping := ""
 		for _, embed := range (*embeds)[i:end] {
 			embed := embed
 			*formData.Embeds = append(*formData.Embeds, embed)
+
+			if len(embed.Role) > 0 {
+				ping = ping + fmt.Sprintf("<@&%s> ", embed.Role)
+			}
+		}
+
+		if len(ping) > 0 {
+			formData.Content = ping
 		}
 
 		formDatas = append(formDatas, formData)
@@ -74,13 +83,14 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 }
 
 func DefaultEmbed(event string, placeholder string) *discord.Embed {
-	description := viper.GetString(fmt.Sprintf("messages.%s", event))
+	description := viper.GetString(fmt.Sprintf("events.%s.message", event))
+	role := viper.GetString(fmt.Sprintf("events.%s.role", event))
 
 	if strings.Contains(description, "%s") {
 		description = fmt.Sprintf(description, placeholder)
 	}
 
-	return &discord.Embed{
+	embed := &discord.Embed{
 		Title:       "",
 		Type:        "rich",
 		Description: description,
@@ -91,6 +101,12 @@ func DefaultEmbed(event string, placeholder string) *discord.Embed {
 			URL:     viper.GetString("frontBaseUrl"),
 		},
 	}
+
+	if len(role) > 0 {
+		embed.Role = role
+	}
+
+	return embed
 }
 
 func MakeEmbed(event string, oldObject, newObject interface{}) *discord.Embed {

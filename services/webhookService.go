@@ -35,7 +35,7 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 			embed := embed
 			*formData.Embeds = append(*formData.Embeds, embed)
 
-			if len(embed.Role) > 0 {
+			if len(embed.Role) > 0 && !strings.Contains(ping, embed.Role) {
 				ping = ping + fmt.Sprintf("<@&%s> ", embed.Role)
 			}
 		}

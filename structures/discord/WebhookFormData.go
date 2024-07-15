@@ -21,6 +21,7 @@ type Embed struct {
 	Author      *Author       `json:"author"`
 	Thumbnail   *EmbedMedia   `json:"thumbnail"`
 	Image       *EmbedMedia   `json:"image"`
+	Role        string
 }
 
 type EmbedMedia struct {

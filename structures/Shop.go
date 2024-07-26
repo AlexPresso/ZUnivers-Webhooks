@@ -13,7 +13,7 @@ type ShopEntry struct {
 
 type ShopInventory struct {
 	Balance      int   `json:"balance"`
-	Golden       bool  `json:"isGolden"`
+	ShinyLevel   int   `json:"shinyLevel"`
 	UpgradeLevel int   `json:"upgradeLevel"`
 	Item         *Item `json:"item"`
 }

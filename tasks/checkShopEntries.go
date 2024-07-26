@@ -65,12 +65,21 @@ func makeShopEmbed(entries []structures.ShopEntry) *discord.Embed {
 	}
 
 	for _, entry := range entries {
-		golden := ""
-		if entry.ShopInventory.Golden {
-			golden = " (dorée)"
+		shiny := ""
+
+		switch entry.ShopInventory.ShinyLevel {
+		case 0:
+			shiny = ""
+			break
+		case 1:
+			shiny = " (dorée)"
+			break
+		case 2:
+			shiny = " (chroma)"
+			break
 		}
 
-		namesField.Value += fmt.Sprintf("`%s%s`\n", entry.ShopInventory.Item.Name, golden)
+		namesField.Value += fmt.Sprintf("`%s%s`\n", entry.ShopInventory.Item.Name, shiny)
 		raritiesField.Value += fmt.Sprintf("`%s`\n", strings.Repeat("★", entry.ShopInventory.Item.Rarity))
 		pricesField.Value += fmt.Sprintf("`%d`\n", entry.ShopInventory.Balance)
 	}

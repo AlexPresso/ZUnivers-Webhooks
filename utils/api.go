@@ -30,6 +30,7 @@ func Request(uri, method string, body []byte, structure interface{}) (err error)
 	req.Header.Set("sec-fetch-mode", "cors")
 	req.Header.Set("sec-fetch-site", "same-site")
 	req.Header.Set("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36")
+	req.Header.Set("x-zunivers-rulesettype", viper.GetString("api.rulesettype"))
 
 	r, err := client.Do(req)
 	if err != nil {

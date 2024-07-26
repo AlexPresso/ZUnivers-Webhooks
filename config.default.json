@@ -3,6 +3,7 @@
   "cdnBaseUrl": "https://zunivers-cdn.zerator.com/zunivers-prod",
   "api": {
     "baseUrl": "https://zunivers-api.zerator.com",
+    "rulesettype": "NORMAL",
     "timeout": 10
   },
   "webhooks": [],

@@ -26,7 +26,7 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 
 		formData := &discord.WebhookFormData{
 			Username:  "ZUnivers-Webhooks",
-			AvatarURL: viper.GetString("frontBaseUrl") + "/img/logo-mini.aea51074.png",
+			AvatarURL: viper.GetString("frontBaseUrl") + "/img/logo-mini.png",
 			Embeds:    &[]discord.Embed{},
 		}
 

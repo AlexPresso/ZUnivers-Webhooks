@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 	"net/http"
 	"reflect"
+	"regexp"
 	"strings"
 )
 
@@ -97,7 +98,7 @@ func DefaultEmbed(event string, placeholder string) *discord.Embed {
 		Color:       374272,
 		Author: &discord.Author{
 			Name:    "ZUnivers",
-			IconURL: viper.GetString("frontBaseUrl") + "/img/logo-mini.aea51074.png",
+			IconURL: viper.GetString("frontBaseUrl") + "/assets/logo-mini.png",
 			URL:     viper.GetString("frontBaseUrl"),
 		},
 	}
@@ -146,6 +147,7 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 
 			for _, part := range parts {
 				part := strings.Split(part, "=")
+				ProcessEmojis(part)
 
 				switch part[0] {
 				case "display":
@@ -166,6 +168,7 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 		embedField.Value += fmt.Sprintf("\n[Page de l'entité](%s)", strings.ReplaceAll(url, " ", "-"))
 	}
 
+	MakeFooter(embedField)
 	embed.Fields = []*discord.EmbedField{embedField}
 }
 
@@ -187,7 +190,7 @@ func processDisplay(field *discord.EmbedField, oldValue, newValue interface{}, p
 		}
 	}
 
-	value := fmt.Sprintf("__%s:__ %s%s\n", split[0], oldValueText, fmt.Sprintf(format, newValue))
+	value := fmt.Sprintf("__%s__ : %s%s\n", split[0], oldValueText, fmt.Sprintf(format, newValue))
 	field.Value += value
 }
 
@@ -200,4 +203,30 @@ func processImage(embed *discord.Embed, newValue interface{}, parts []string) {
 	embed.Thumbnail = &discord.EmbedMedia{
 		Url: cdnBase + fmt.Sprintf(parts[1], newValue),
 	}
+}
+
+func ProcessEmojis(parts []string) {
+	emojiPattern := `:\w+:`
+
+	for i := range parts {
+		re, err := regexp.Compile(emojiPattern)
+		if err != nil {
+			continue
+		}
+
+		parts[i] = re.ReplaceAllStringFunc(parts[i], func(match string) string {
+			key := strings.Trim(match, ":")
+			value := viper.GetString(fmt.Sprintf("emojis.%s", key))
+
+			if value == "" {
+				return match
+			}
+
+			return value
+		})
+	}
+}
+
+func MakeFooter(field *discord.EmbedField) {
+	field.Value += fmt.Sprintf("\n-# Développé avec %s par Alex'Presso", viper.GetString("emojis.heart"))
 }

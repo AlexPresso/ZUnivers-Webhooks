@@ -6,6 +6,12 @@
     "rulesettype": "NORMAL",
     "timeout": 10
   },
+  "emojis": {
+    "balance": "<:ZUMonnaie:948286077473546280>",
+    "loreDust": "<:Poudrecreatrice:948289012693610546>",
+    "loreFragment": "<:Cristaldhistoire:948578144670089216>",
+    "heart": "<:zrtL:1090002476536701049>"
+  },
   "webhooks": [],
   "events": {
     "config_changed": {

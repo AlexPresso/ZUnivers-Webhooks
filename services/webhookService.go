@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/alexpresso/zunivers-webhooks/structures/discord"
 	"github.com/alexpresso/zunivers-webhooks/utils"
+	"github.com/edlinorg/prominentcolor"
 	"github.com/spf13/viper"
 	"net/http"
 	"reflect"
@@ -13,10 +14,18 @@ import (
 	"strings"
 )
 
+const EmojiPattern = `:\w+:`
+const ValueChangeFormat = "`%s` → "
+const NameValueEntryFormat = "__%s__ : %s%s\n"
+const EntityPageFormat = "\n[Page de l'entité](%s)"
+
 func DispatchEmbeds(embeds *[]discord.Embed) {
 	if len(*embeds) == 0 {
 		return
 	}
+
+	var themeColor uint32 = 374272
+	calculateThemeColor(&themeColor)
 
 	var formDatas []*discord.WebhookFormData
 	for i := 0; i < len(*embeds); i += 10 {
@@ -34,6 +43,8 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 		ping := ""
 		for _, embed := range (*embeds)[i:end] {
 			embed := embed
+			embed.Color = themeColor
+
 			*formData.Embeds = append(*formData.Embeds, embed)
 
 			if len(embed.Role) > 0 && !strings.Contains(ping, embed.Role) {
@@ -165,7 +176,7 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 	}
 
 	if url != "" {
-		embedField.Value += fmt.Sprintf("\n[Page de l'entité](%s)", strings.ReplaceAll(url, " ", "-"))
+		embedField.Value += fmt.Sprintf(EntityPageFormat, strings.ReplaceAll(url, " ", "-"))
 	}
 
 	MakeFooter(embedField)
@@ -183,14 +194,14 @@ func processDisplay(field *discord.EmbedField, oldValue, newValue interface{}, p
 	if oldValue != nil {
 		if utils.IsTime(oldValue) {
 			if utils.TimeDifference(oldValue, newValue) {
-				oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprintf(format, oldValue))
+				oldValueText = fmt.Sprintf(ValueChangeFormat, fmt.Sprintf(format, oldValue))
 			}
 		} else if oldValue != newValue {
-			oldValueText = fmt.Sprintf("`%s` → ", fmt.Sprintf(format, oldValue))
+			oldValueText = fmt.Sprintf(ValueChangeFormat, fmt.Sprintf(format, oldValue))
 		}
 	}
 
-	value := fmt.Sprintf("__%s__ : %s%s\n", split[0], oldValueText, fmt.Sprintf(format, newValue))
+	value := fmt.Sprintf(NameValueEntryFormat, split[0], oldValueText, fmt.Sprintf(format, newValue))
 	field.Value += value
 }
 
@@ -206,10 +217,8 @@ func processImage(embed *discord.Embed, newValue interface{}, parts []string) {
 }
 
 func ProcessEmojis(parts []string) {
-	emojiPattern := `:\w+:`
-
 	for i := range parts {
-		re, err := regexp.Compile(emojiPattern)
+		re, err := regexp.Compile(EmojiPattern)
 		if err != nil {
 			continue
 		}
@@ -229,4 +238,33 @@ func ProcessEmojis(parts []string) {
 
 func MakeFooter(field *discord.EmbedField) {
 	field.Value += fmt.Sprintf("\n-# Développé avec %s par Alex'Presso", viper.GetString("emojis.heart"))
+}
+
+func calculateThemeColor(themeColor *uint32) {
+	logo, err := FetchLogo()
+	if err != nil {
+		utils.Log("An error occurred while fetching logo: " + err.Error())
+		return
+	}
+
+	res, err := prominentcolor.KmeansWithAll(
+		1,
+		logo,
+		prominentcolor.ArgumentDefault,
+		uint(prominentcolor.DefaultSize),
+		prominentcolor.GetDefaultMasks(),
+	)
+
+	if err != nil {
+		utils.Log("An error occurred while calculating prominent color: " + err.Error())
+		return
+	}
+
+	if len(res) == 0 {
+		utils.Log("No prominent color found")
+		return
+	}
+
+	color := res[0].Color
+	*themeColor = color.R<<16 | color.G<<8 | color.B
 }

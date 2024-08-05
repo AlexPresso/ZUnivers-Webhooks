@@ -11,7 +11,7 @@ type Challenge struct {
 
 	ChallengeID    string `json:"id"`
 	Description    string `json:"description" zu:"display=Description"`
-	RewardLoreDust int    `json:"rewardLoreDust" zu:"display=Poussière de lore"`
+	RewardLoreDust int    `json:"rewardLoreDust" zu:"display=Gains :loreDust:"`
 	Score          int    `json:"score" zu:"display=Score"`
 	Type           string `json:"type" zu:"display=Type"`
 }

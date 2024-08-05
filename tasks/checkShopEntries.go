@@ -8,7 +8,6 @@ import (
 	"github.com/alexpresso/zunivers-webhooks/utils"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
-	"strings"
 )
 
 func checkShopEntries(db *gorm.DB, embeds *[]discord.Embed) {
@@ -48,21 +47,14 @@ func makeShopEmbed(entries []structures.ShopEntry) *discord.Embed {
 	frontBaseUrl := viper.GetString("frontBaseUrl")
 
 	embed := services.DefaultEmbed("shop_changed", fmt.Sprintf("%s/echoppe", frontBaseUrl))
-	namesField := &discord.EmbedField{
+	itemsField := &discord.EmbedField{
 		Name:   "Items",
 		Value:  "",
 		Inline: true,
 	}
-	raritiesField := &discord.EmbedField{
-		Name:   "Raretés",
-		Value:  "",
-		Inline: true,
-	}
-	pricesField := &discord.EmbedField{
-		Name:   "Prix",
-		Value:  "",
-		Inline: true,
-	}
+
+	itemPrices := make(map[string]int)
+	maxNameLength := 0
 
 	for _, entry := range entries {
 		shiny := ""
@@ -79,12 +71,21 @@ func makeShopEmbed(entries []structures.ShopEntry) *discord.Embed {
 			break
 		}
 
-		namesField.Value += fmt.Sprintf("`%s%s`\n", entry.ShopInventory.Item.Name, shiny)
-		raritiesField.Value += fmt.Sprintf("`%s`\n", strings.Repeat("★", entry.ShopInventory.Item.Rarity))
-		pricesField.Value += fmt.Sprintf("`%d`\n", entry.ShopInventory.Balance)
+		name := fmt.Sprintf("%s%s", entry.ShopInventory.Item.Name, shiny)
+		itemPrices[name] = entry.ShopInventory.Balance
+
+		if len(name) > maxNameLength {
+			maxNameLength = len(name)
+		}
 	}
 
-	embed.Fields = []*discord.EmbedField{namesField, raritiesField, pricesField}
+	emoji := viper.GetString("emojis.balance")
+	for name, price := range itemPrices {
+		itemsField.Value += fmt.Sprintf("`%-*s %d`%s\n", maxNameLength, name, price, emoji)
+	}
+
+	services.MakeFooter(itemsField)
+	embed.Fields = []*discord.EmbedField{itemsField}
 
 	return embed
 }

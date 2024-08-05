@@ -2,8 +2,13 @@ package utils
 
 import (
 	"bytes"
+	"compress/gzip"
 	"encoding/json"
 	"github.com/spf13/viper"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
+	"io"
 	"net/http"
 	"time"
 )
@@ -13,7 +18,15 @@ func Request(uri, method string, body []byte, structure interface{}) (err error)
 		Timeout: viper.GetDuration("api.timeout") * time.Second,
 	}
 
-	req, err := http.NewRequest(method, viper.GetString("api.baseUrl")+uri, bytes.NewBuffer(body))
+	var baseUrl string
+	switch structure.(type) {
+	case *image.Image:
+		baseUrl = viper.GetString("frontBaseUrl")
+	default:
+		baseUrl = viper.GetString("api.baseUrl")
+	}
+
+	req, err := http.NewRequest(method, baseUrl+uri, bytes.NewBuffer(body))
 	if err != nil {
 		return
 	}
@@ -38,7 +51,24 @@ func Request(uri, method string, body []byte, structure interface{}) (err error)
 	}
 
 	defer r.Body.Close()
+	var reader io.Reader = r.Body
+	if r.Header.Get("Content-Encoding") == "gzip" {
+		reader, err = gzip.NewReader(r.Body)
+		if err != nil {
+			return
+		}
+		defer reader.(*gzip.Reader).Close()
+	}
 
-	err = json.NewDecoder(r.Body).Decode(structure)
+	switch structure.(type) {
+	case *image.Image:
+		*(structure.(*image.Image)), _, err = image.Decode(r.Body)
+		if err != nil {
+			return err
+		}
+	default:
+		err = json.NewDecoder(r.Body).Decode(structure)
+	}
+
 	return
 }

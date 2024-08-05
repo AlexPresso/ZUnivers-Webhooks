@@ -3,6 +3,7 @@ package services
 import (
 	"github.com/alexpresso/zunivers-webhooks/structures"
 	"github.com/alexpresso/zunivers-webhooks/utils"
+	"image"
 	"net/url"
 )
 
@@ -68,5 +69,10 @@ func FetchChallenges() (chProgress []structures.ChallengeProgress, err error) {
 
 func FetchShop() (entries []structures.ShopEntry, err error) {
 	err = utils.Request("/public/shop", "GET", nil, &entries)
+	return
+}
+
+func FetchLogo() (logo image.Image, err error) {
+	err = utils.Request("/assets/logo-mini.png", "GET", nil, &logo)
 	return
 }

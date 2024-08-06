@@ -8,12 +8,23 @@ import (
 	"gorm.io/gorm"
 )
 
+const NewEventEvent = "new_event"
+const EventChangedEvent = "event_changed"
+const EventRemovedEvent = "event_removed"
+
 func checkEvents(db *gorm.DB, embeds *[]discord.Embed) {
-	events, err := services.FetchEvents()
+	if !utils.EventsEnabled([]string{NewEventEvent, EventChangedEvent, EventRemovedEvent}) {
+		return
+	}
+
+	events, resSpec, err := services.FetchEvents()
 	if err != nil {
 		utils.Log("An error occurred while fetching events: " + err.Error())
 		return
 	}
+
+	checkResponse(db, embeds, EventChangedEvent, resSpec)
+
 	eventsMap := make(map[string]*structures.Event)
 	for _, event := range events {
 		event := event
@@ -36,10 +47,10 @@ func checkEvents(db *gorm.DB, embeds *[]discord.Embed) {
 			event.ID = dbEvent.ID
 
 			if utils.AreDifferent(*event, *dbEvent) {
-				*embeds = append(*embeds, *services.MakeEmbed("event_changed", *dbEvent, *event))
+				*embeds = append(*embeds, *services.MakeEmbed(EventChangedEvent, *dbEvent, *event))
 			}
 		} else if len(dbEvents) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed("new_event", nil, *event))
+			*embeds = append(*embeds, *services.MakeEmbed(NewEventEvent, nil, *event))
 		}
 	}
 
@@ -49,7 +60,7 @@ func checkEvents(db *gorm.DB, embeds *[]discord.Embed) {
 		event := event
 		if eventsMap[event.EventID] == nil {
 			db.Delete(&event)
-			*embeds = append(*embeds, *services.MakeEmbed("event_removed", nil, event))
+			*embeds = append(*embeds, *services.MakeEmbed(EventRemovedEvent, nil, event))
 		}
 	}
 }

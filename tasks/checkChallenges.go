@@ -8,12 +8,21 @@ import (
 	"gorm.io/gorm"
 )
 
+const NewChallengeEvent = "new_challenge"
+const ChallengeChangedEvent = "challenge_changed"
+
 func checkChallenges(db *gorm.DB, embeds *[]discord.Embed) {
-	chProgress, err := services.FetchChallenges()
+	if !utils.EventsEnabled([]string{NewChallengeEvent, ChallengeChangedEvent}) {
+		return
+	}
+
+	chProgress, resSpec, err := services.FetchChallenges()
 	if err != nil {
 		utils.Log("An error occurred while fetching challenges: " + err.Error())
 		return
 	}
+
+	checkResponse(db, embeds, ChallengeChangedEvent, resSpec)
 
 	var challenges []*structures.Challenge
 	var dbChallenges []structures.Challenge
@@ -34,10 +43,10 @@ func checkChallenges(db *gorm.DB, embeds *[]discord.Embed) {
 			(*challenge).ID = dbChallenge.ID
 
 			if utils.AreDifferent(**challenge, *dbChallenge) {
-				*embeds = append(*embeds, *services.MakeEmbed("challenge_changed", *dbChallenge, **challenge))
+				*embeds = append(*embeds, *services.MakeEmbed(ChallengeChangedEvent, *dbChallenge, **challenge))
 			}
 		} else if len(dbChallengesMap) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed("new_challenge", nil, **challenge))
+			*embeds = append(*embeds, *services.MakeEmbed(NewChallengeEvent, nil, **challenge))
 		}
 	}
 

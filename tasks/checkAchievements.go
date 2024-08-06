@@ -8,12 +8,23 @@ import (
 	"gorm.io/gorm"
 )
 
+const NewAchievementEvent = "new_achievement"
+const AchievementChangedEvent = "achievement_changed"
+const NewAchievementCategoryEvent = "new_achievement_category"
+const AchievementCategoryChangedEvent = "achievement_category_changed"
+
 func checkAchievementCategories(db *gorm.DB, embeds *[]discord.Embed) {
-	categories, err := services.FetchAchievementCategories()
+	if !utils.EventsEnabled([]string{NewAchievementCategoryEvent, AchievementCategoryChangedEvent}) {
+		return
+	}
+
+	categories, resSpec, err := services.FetchAchievementCategories()
 	if err != nil {
 		utils.Log("An error occured while fetching achievement categories: " + err.Error())
 		return
 	}
+
+	checkResponse(db, embeds, AchievementCategoryChangedEvent, resSpec)
 
 	var dbCategories []structures.AchievementCategory
 	db.Find(&dbCategories)
@@ -39,10 +50,10 @@ func checkAchievementCategories(db *gorm.DB, embeds *[]discord.Embed) {
 			category.ID = dbCategory.ID
 
 			if utils.AreDifferent(*category, *dbCategory) {
-				*embeds = append(*embeds, *services.MakeEmbed("achievement_category_changed", *dbCategory, *category))
+				*embeds = append(*embeds, *services.MakeEmbed(AchievementCategoryChangedEvent, *dbCategory, *category))
 			}
 		} else if len(dbCategories) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed("new_achievement_category", nil, *category))
+			*embeds = append(*embeds, *services.MakeEmbed(NewAchievementCategoryEvent, nil, *category))
 		}
 
 		checkAchievements(category.CategoryID, db, embeds, dbAchievementsMap)
@@ -52,11 +63,17 @@ func checkAchievementCategories(db *gorm.DB, embeds *[]discord.Embed) {
 }
 
 func checkAchievements(categoryId string, db *gorm.DB, embeds *[]discord.Embed, dbAchievementsMap map[string]*structures.Achievement) {
-	achProgress, err := services.FetchAchievements(categoryId)
+	if !utils.EventsEnabled([]string{NewAchievementEvent, AchievementChangedEvent}) {
+		return
+	}
+
+	achProgress, resSpec, err := services.FetchAchievements(categoryId)
 	if err != nil {
 		utils.Log("An error occured while fetching achievements: " + err.Error())
 		return
 	}
+
+	checkResponse(db, embeds, AchievementChangedEvent, resSpec)
 
 	var achievements []*structures.Achievement
 
@@ -69,10 +86,10 @@ func checkAchievements(categoryId string, db *gorm.DB, embeds *[]discord.Embed, 
 			(*achievement).ID = dbAchievement.ID
 
 			if utils.AreDifferent(**achievement, *dbAchievement) {
-				*embeds = append(*embeds, *services.MakeEmbed("achievement_changed", *dbAchievement, **achievement))
+				*embeds = append(*embeds, *services.MakeEmbed(AchievementChangedEvent, *dbAchievement, **achievement))
 			}
 		} else if len(dbAchievementsMap) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed("new_achievement", nil, **achievement))
+			*embeds = append(*embeds, *services.MakeEmbed(NewAchievementEvent, nil, **achievement))
 		}
 	}
 

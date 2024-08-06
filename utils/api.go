@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/json"
+	"fmt"
 	"github.com/spf13/viper"
 	"image"
 	_ "image/jpeg"
@@ -13,7 +14,9 @@ import (
 	"time"
 )
 
-func Request(uri, method string, body []byte, structure interface{}) (err error) {
+const ResponseChangedEvent = "response_changed"
+
+func Request(uri, method string, body []byte, structure interface{}, resSpec map[string]interface{}) (err error) {
 	client := &http.Client{
 		Timeout: viper.GetDuration("api.timeout") * time.Second,
 	}
@@ -68,7 +71,35 @@ func Request(uri, method string, body []byte, structure interface{}) (err error)
 		}
 	default:
 		err = json.NewDecoder(r.Body).Decode(structure)
+
+		if EventsEnabled([]string{ResponseChangedEvent}) {
+			err = json.NewDecoder(reader).Decode(&resSpec)
+			if err != nil {
+				replaceValuesWithTypes(resSpec)
+			}
+		}
 	}
 
 	return
+}
+
+func replaceValuesWithTypes(data map[string]interface{}) {
+	for key, value := range data {
+		switch v := value.(type) {
+		case map[string]interface{}:
+			replaceValuesWithTypes(v)
+		case []interface{}:
+			data[key] = "array"
+		case string:
+			data[key] = "string"
+		case float64:
+			data[key] = "number"
+		case bool:
+			data[key] = "boolean"
+		case nil:
+			data[key] = "null"
+		default:
+			data[key] = fmt.Sprintf("unknown (%T)", v)
+		}
+	}
 }

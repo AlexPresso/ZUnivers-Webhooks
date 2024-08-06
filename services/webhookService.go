@@ -45,6 +45,8 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 			embed := embed
 			embed.Color = themeColor
 
+			addFooter(&embed)
+
 			*formData.Embeds = append(*formData.Embeds, embed)
 
 			if len(embed.Role) > 0 && !strings.Contains(ping, embed.Role) {
@@ -179,7 +181,6 @@ func fillEmbed(embed *discord.Embed, oldObject, newObject interface{}) {
 		embedField.Value += fmt.Sprintf(EntityPageFormat, strings.ReplaceAll(url, " ", "-"))
 	}
 
-	MakeFooter(embedField)
 	embed.Fields = []*discord.EmbedField{embedField}
 }
 
@@ -236,8 +237,14 @@ func ProcessEmojis(parts []string) {
 	}
 }
 
-func MakeFooter(field *discord.EmbedField) {
-	field.Value += fmt.Sprintf("\n-# Développé avec %s par Alex'Presso", viper.GetString("emojis.heart"))
+func addFooter(embed *discord.Embed) {
+	footer := fmt.Sprintf("\n-# Développé avec %s par Alex'Presso", viper.GetString("emojis.heart"))
+
+	if embed.Fields != nil && len(embed.Fields) > 0 {
+		embed.Fields[len(embed.Fields)-1].Value += footer
+	} else {
+		embed.Description += fmt.Sprintf("\n%s", footer)
+	}
 }
 
 func calculateThemeColor(themeColor *uint32) {

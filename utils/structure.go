@@ -1,8 +1,10 @@
 package utils
 
 import (
+	"fmt"
 	"github.com/alexpresso/zunivers-webhooks/structures"
 	"reflect"
+	"sort"
 	"strings"
 	"time"
 )
@@ -52,4 +54,43 @@ func TimeDifference(a interface{}, b interface{}) bool {
 	}
 
 	return !aT.Equal(bT)
+}
+
+func GenerateDiff(a, b map[string]interface{}) (diff string, changed bool) {
+	var sb strings.Builder
+	changed = false
+
+	keys := make(map[string]struct{})
+	for key := range a {
+		keys[key] = struct{}{}
+	}
+	for key := range b {
+		keys[key] = struct{}{}
+	}
+
+	sortedKeys := make([]string, 0, len(keys))
+	for key := range keys {
+		sortedKeys = append(sortedKeys, key)
+	}
+	sort.Strings(sortedKeys)
+
+	for _, key := range sortedKeys {
+		valueA, existsA := a[key]
+		valueB, existsB := b[key]
+
+		if existsA && !existsB {
+			sb.WriteString(fmt.Sprintf("- %s: %v\n", key, valueA))
+			changed = true
+		} else if !existsA && existsB {
+			sb.WriteString(fmt.Sprintf("+ %s: %v\n", key, valueB))
+			changed = true
+		} else if existsA && existsB && valueA != valueB {
+			sb.WriteString(fmt.Sprintf("- %s: %v\n", key, valueA))
+			sb.WriteString(fmt.Sprintf("+ %s: %v\n", key, valueB))
+			changed = true
+		}
+	}
+
+	diff = sb.String()
+	return
 }

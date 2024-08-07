@@ -23,7 +23,7 @@ func checkItems(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	checkResponse(db, embeds, ItemChangedEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	itemsMap := make(map[string]*structures.Item)
 	for _, item := range items {

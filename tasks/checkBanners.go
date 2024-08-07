@@ -22,7 +22,7 @@ func checkBanners(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	checkResponse(db, embeds, BannerChangedEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	var dbBanners []structures.Banner
 	db.Find(&dbBanners)

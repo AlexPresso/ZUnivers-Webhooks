@@ -22,7 +22,7 @@ func checkPatchnotes(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	checkResponse(db, embeds, NewPatchnoteEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	if len(patchnotes) == 0 {
 		return

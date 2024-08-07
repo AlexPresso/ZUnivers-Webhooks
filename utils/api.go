@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"encoding/json"
 	"fmt"
+	"github.com/alexpresso/zunivers-webhooks/structures"
 	"github.com/spf13/viper"
 	"image"
 	_ "image/jpeg"
@@ -16,7 +17,7 @@ import (
 
 const ResponseChangedEvent = "response_changed"
 
-func Request(uri, method string, body []byte, structure interface{}, resSpec map[string]interface{}) (err error) {
+func Request(uri, method string, body []byte, structure interface{}, resSpec *structures.JsonResponseSpec) (err error) {
 	client := &http.Client{
 		Timeout: viper.GetDuration("api.timeout") * time.Second,
 	}
@@ -63,19 +64,41 @@ func Request(uri, method string, body []byte, structure interface{}, resSpec map
 		defer reader.(*gzip.Reader).Close()
 	}
 
+	bodyBytes, err := io.ReadAll(reader)
+	if err != nil {
+		Log(fmt.Sprintf("Error reading request body: %v", err))
+		return
+	}
+
 	switch structure.(type) {
 	case *image.Image:
-		*(structure.(*image.Image)), _, err = image.Decode(r.Body)
+		*(structure.(*image.Image)), _, err = image.Decode(bytes.NewReader(bodyBytes))
 		if err != nil {
 			return err
 		}
 	default:
-		err = json.NewDecoder(r.Body).Decode(structure)
+		err = json.NewDecoder(bytes.NewReader(bodyBytes)).Decode(structure)
 
 		if EventsEnabled([]string{ResponseChangedEvent}) {
-			err = json.NewDecoder(reader).Decode(&resSpec)
+			var specMap interface{}
+
+			err = json.NewDecoder(bytes.NewReader(bodyBytes)).Decode(&specMap)
 			if err != nil {
-				replaceValuesWithTypes(resSpec)
+				Log("Error while decoding data")
+				return
+			}
+
+			var prettySpec []byte
+
+			prettySpec, err = json.MarshalIndent(replaceValuesWithTypes(specMap), "", "  ")
+			if err != nil {
+				Log("Error while decoding data")
+				return
+			}
+
+			*resSpec = structures.JsonResponseSpec{
+				EndpointURI: uri,
+				Value:       string(prettySpec),
 			}
 		}
 	}
@@ -83,23 +106,29 @@ func Request(uri, method string, body []byte, structure interface{}, resSpec map
 	return
 }
 
-func replaceValuesWithTypes(data map[string]interface{}) {
-	for key, value := range data {
-		switch v := value.(type) {
-		case map[string]interface{}:
-			replaceValuesWithTypes(v)
-		case []interface{}:
-			data[key] = "array"
-		case string:
-			data[key] = "string"
-		case float64:
-			data[key] = "number"
-		case bool:
-			data[key] = "boolean"
-		case nil:
-			data[key] = "null"
-		default:
-			data[key] = fmt.Sprintf("unknown (%T)", v)
+func replaceValuesWithTypes(data interface{}) interface{} {
+	switch v := data.(type) {
+	case string:
+		return "string"
+	case float64:
+		return "number"
+	case bool:
+		return "bool"
+	case nil:
+		return "null"
+	case map[string]interface{}:
+		for key, value := range v {
+			v[key] = replaceValuesWithTypes(value)
 		}
+		return v
+	case []interface{}:
+		if len(v) == 0 {
+			return v
+		}
+
+		v[0] = replaceValuesWithTypes(v[0])
+		return []interface{}{v[0]}
+	default:
+		return fmt.Sprintf("unknown (%T)", v)
 	}
 }

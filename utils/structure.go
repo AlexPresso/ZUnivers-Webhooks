@@ -3,8 +3,9 @@ package utils
 import (
 	"fmt"
 	"github.com/alexpresso/zunivers-webhooks/structures"
+	"github.com/sergi/go-diff/diffmatchpatch"
 	"reflect"
-	"sort"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -56,41 +57,36 @@ func TimeDifference(a interface{}, b interface{}) bool {
 	return !aT.Equal(bT)
 }
 
-func GenerateDiff(a, b map[string]interface{}) (diff string, changed bool) {
-	var sb strings.Builder
-	changed = false
+func GenerateDiff(a, b string) (diff string, hasDiff bool) {
+	dmp := diffmatchpatch.New()
 
-	keys := make(map[string]struct{})
-	for key := range a {
-		keys[key] = struct{}{}
-	}
-	for key := range b {
-		keys[key] = struct{}{}
-	}
+	ca, cb, lines := dmp.DiffLinesToChars(a, b)
+	diffs := dmp.DiffMain(ca, cb, false)
+	diffs = dmp.DiffCharsToLines(diffs, lines)
+	diffs = dmp.DiffCleanupSemantic(diffs)
 
-	sortedKeys := make([]string, 0, len(keys))
-	for key := range keys {
-		sortedKeys = append(sortedKeys, key)
-	}
-	sort.Strings(sortedKeys)
+	spacesRgx := regexp.MustCompile(`^\s+`)
 
-	for _, key := range sortedKeys {
-		valueA, existsA := a[key]
-		valueB, existsB := b[key]
-
-		if existsA && !existsB {
-			sb.WriteString(fmt.Sprintf("- %s: %v\n", key, valueA))
-			changed = true
-		} else if !existsA && existsB {
-			sb.WriteString(fmt.Sprintf("+ %s: %v\n", key, valueB))
-			changed = true
-		} else if existsA && existsB && valueA != valueB {
-			sb.WriteString(fmt.Sprintf("- %s: %v\n", key, valueA))
-			sb.WriteString(fmt.Sprintf("+ %s: %v\n", key, valueB))
-			changed = true
+	var finalDiff strings.Builder
+	for _, diff := range diffs {
+		switch diff.Type {
+		case diffmatchpatch.DiffEqual:
+			finalDiff.WriteString(diff.Text)
+		case diffmatchpatch.DiffDelete:
+			hasDiff = true
+			lineDiffFormatAppender("- %s\n", diff.Text, spacesRgx, &finalDiff)
+		case diffmatchpatch.DiffInsert:
+			hasDiff = true
+			lineDiffFormatAppender("+ %s\n", diff.Text, spacesRgx, &finalDiff)
 		}
 	}
 
-	diff = sb.String()
-	return
+	return finalDiff.String(), hasDiff
+}
+
+func lineDiffFormatAppender(format string, fullDiffText string, offsetRegex *regexp.Regexp, sb *strings.Builder) {
+	for _, line := range strings.Split(fullDiffText, "\n") {
+		offset := len(offsetRegex.FindAllStringIndex(line, -1))
+		sb.WriteString(fmt.Sprintf(format, line[offset:]))
+	}
 }

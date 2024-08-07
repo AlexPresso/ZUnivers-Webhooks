@@ -23,7 +23,7 @@ func checkPacks(db *gorm.DB, embeds *[]discord.Embed) (packs []structures.Pack) 
 		return
 	}
 
-	checkResponse(db, embeds, PackChangedEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	packsMap := make(map[string]*structures.Pack)
 	for _, pack := range packs {

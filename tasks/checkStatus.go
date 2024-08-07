@@ -21,7 +21,7 @@ func checkStatus(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	checkResponse(db, embeds, StatusChangedEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	var currStatus structures.Status
 	if res := db.First(&currStatus); res.Error == nil {

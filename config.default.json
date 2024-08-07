@@ -132,7 +132,7 @@
     "response_changed": {
       "enabled": false,
       "role": "",
-      "message": "Le format de la réponse d'un endpoint a changé !"
+      "message": "Le format de la réponse de `%s` a changé ! "
     }
   }
 }

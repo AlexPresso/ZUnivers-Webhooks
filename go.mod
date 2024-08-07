@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/edlinorg/prominentcolor v1.0.0
 	github.com/go-co-op/gocron v1.37.0
+	github.com/sergi/go-diff v1.3.1
 	github.com/spf13/viper v1.18.2
 	gorm.io/driver/sqlite v1.5.4
 	gorm.io/gorm v1.25.5

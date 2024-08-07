@@ -86,7 +86,7 @@ func DispatchEmbeds(embeds *[]discord.Embed) {
 			body, _ := json.Marshal(formData)
 
 			res, err := http.Post(fmt.Sprintf("%s?wait=true", url), "application/json", bytes.NewBuffer(body))
-			if err != nil {
+			if err != nil || res.StatusCode != 200 {
 				utils.Log(fmt.Sprintf("Failed to dispatch to: %s", url))
 				fmt.Println(res)
 			}

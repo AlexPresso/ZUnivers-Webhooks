@@ -21,7 +21,7 @@ func checkSeason(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	checkResponse(db, embeds, NewSeasonEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	var dbSeason structures.Season
 	if res := db.Last(&dbSeason); res.Error == nil {

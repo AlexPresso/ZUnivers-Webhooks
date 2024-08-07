@@ -13,7 +13,7 @@ const ItemChangedEvent = "item_changed"
 const ItemRemovedEvent = "item_removed"
 
 func checkItems(db *gorm.DB, embeds *[]discord.Embed) {
-	if !utils.EventsEnabled([]string{NewItemEvent, ItemChangedEvent, ItemRemovedEvent}) {
+	if utils.EventsAllDisabled([]string{NewItemEvent, ItemChangedEvent, ItemRemovedEvent}) {
 		return
 	}
 
@@ -54,10 +54,10 @@ func checkItems(db *gorm.DB, embeds *[]discord.Embed) {
 			item.ID = dbItem.ID
 
 			if utils.AreDifferent(*item, *dbItem) {
-				*embeds = append(*embeds, *services.MakeEmbed(ItemChangedEvent, *dbItem, *item))
+				services.MakeEmbed(ItemChangedEvent, *dbItem, *item, embeds)
 			}
 		} else if len(dbItems) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed(NewItemEvent, nil, *item))
+			services.MakeEmbed(NewItemEvent, nil, *item, embeds)
 		}
 	}
 
@@ -67,7 +67,7 @@ func checkItems(db *gorm.DB, embeds *[]discord.Embed) {
 		item := item
 		if itemsMap[item.ItemID] == nil {
 			db.Delete(&item)
-			*embeds = append(*embeds, *services.MakeEmbed(ItemRemovedEvent, nil, item))
+			services.MakeEmbed(ItemRemovedEvent, nil, item, embeds)
 		}
 	}
 }

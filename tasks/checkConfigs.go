@@ -12,7 +12,7 @@ import (
 const ConfigChangedEvent = "config_changed"
 
 func checkConfigs(db *gorm.DB, embeds *[]discord.Embed) {
-	if !utils.EventsEnabled([]string{ConfigChangedEvent}) {
+	if utils.EventsAllDisabled([]string{ConfigChangedEvent}) {
 		return
 	}
 
@@ -40,10 +40,10 @@ func checkConfigs(db *gorm.DB, embeds *[]discord.Embed) {
 			config.ID = dbConfig.ID
 
 			if utils.AreDifferent(*dbConfig, *config) {
-				*embeds = append(*embeds, *services.MakeEmbed(ConfigChangedEvent, *dbConfig, *config))
+				services.MakeEmbed(ConfigChangedEvent, *dbConfig, *config, embeds)
 			}
 		} else if len(dbConfigs) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed(ConfigChangedEvent, nil, *config))
+			services.MakeEmbed(ConfigChangedEvent, nil, *config, embeds)
 		}
 	}
 

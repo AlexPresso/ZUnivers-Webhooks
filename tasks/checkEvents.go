@@ -13,7 +13,7 @@ const EventChangedEvent = "event_changed"
 const EventRemovedEvent = "event_removed"
 
 func checkEvents(db *gorm.DB, embeds *[]discord.Embed) {
-	if !utils.EventsEnabled([]string{NewEventEvent, EventChangedEvent, EventRemovedEvent}) {
+	if utils.EventsAllDisabled([]string{NewEventEvent, EventChangedEvent, EventRemovedEvent}) {
 		return
 	}
 
@@ -47,10 +47,10 @@ func checkEvents(db *gorm.DB, embeds *[]discord.Embed) {
 			event.ID = dbEvent.ID
 
 			if utils.AreDifferent(*event, *dbEvent) {
-				*embeds = append(*embeds, *services.MakeEmbed(EventChangedEvent, *dbEvent, *event))
+				services.MakeEmbed(EventChangedEvent, *dbEvent, *event, embeds)
 			}
 		} else if len(dbEvents) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed(NewEventEvent, nil, *event))
+			services.MakeEmbed(NewEventEvent, nil, *event, embeds)
 		}
 	}
 
@@ -60,7 +60,7 @@ func checkEvents(db *gorm.DB, embeds *[]discord.Embed) {
 		event := event
 		if eventsMap[event.EventID] == nil {
 			db.Delete(&event)
-			*embeds = append(*embeds, *services.MakeEmbed(EventRemovedEvent, nil, event))
+			services.MakeEmbed(EventRemovedEvent, nil, event, embeds)
 		}
 	}
 }

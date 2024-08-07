@@ -12,7 +12,7 @@ import (
 const ResponseChangedEvent = "response_changed"
 
 func checkResponse(db *gorm.DB, embeds *[]discord.Embed, resSpec structures.JsonResponseSpec) {
-	if !utils.EventsEnabled([]string{ResponseChangedEvent}) {
+	if utils.EventsAllDisabled([]string{ResponseChangedEvent}) {
 		return
 	}
 

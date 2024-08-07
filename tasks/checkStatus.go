@@ -11,7 +11,7 @@ import (
 const StatusChangedEvent = "status_changed"
 
 func checkStatus(db *gorm.DB, embeds *[]discord.Embed) {
-	if !utils.EventsEnabled([]string{StatusChangedEvent}) {
+	if utils.EventsAllDisabled([]string{StatusChangedEvent}) {
 		return
 	}
 
@@ -28,7 +28,7 @@ func checkStatus(db *gorm.DB, embeds *[]discord.Embed) {
 		status.ID = currStatus.ID
 
 		if utils.AreDifferent(currStatus, status) {
-			*embeds = append(*embeds, *services.MakeEmbed(StatusChangedEvent, currStatus, status))
+			services.MakeEmbed(StatusChangedEvent, currStatus, status, embeds)
 		}
 	}
 

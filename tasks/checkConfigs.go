@@ -9,12 +9,20 @@ import (
 	"gorm.io/gorm"
 )
 
+const ConfigChangedEvent = "config_changed"
+
 func checkConfigs(db *gorm.DB, embeds *[]discord.Embed) {
-	configs, err := services.FetchConfigs()
+	if utils.EventsAllDisabled([]string{ConfigChangedEvent}) {
+		return
+	}
+
+	configs, resSpec, err := services.FetchConfigs()
 	if err != nil {
 		utils.Log("An error occurred while fetching configs: " + err.Error())
 		return
 	}
+
+	checkResponse(db, embeds, resSpec)
 
 	var dbConfigs []structures.Config
 	db.Find(&dbConfigs)
@@ -32,10 +40,10 @@ func checkConfigs(db *gorm.DB, embeds *[]discord.Embed) {
 			config.ID = dbConfig.ID
 
 			if utils.AreDifferent(*dbConfig, *config) {
-				*embeds = append(*embeds, *services.MakeEmbed("config_changed", *dbConfig, *config))
+				services.MakeEmbed(ConfigChangedEvent, *dbConfig, *config, embeds)
 			}
 		} else if len(dbConfigs) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed("config_changed", nil, *config))
+			services.MakeEmbed(ConfigChangedEvent, nil, *config, embeds)
 		}
 	}
 

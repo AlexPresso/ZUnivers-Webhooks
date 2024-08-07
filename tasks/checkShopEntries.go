@@ -10,12 +10,20 @@ import (
 	"gorm.io/gorm"
 )
 
+const ShopChangedEvent = "shop_changed"
+
 func checkShopEntries(db *gorm.DB, embeds *[]discord.Embed) {
-	entries, err := services.FetchShop()
+	if utils.EventsAllDisabled([]string{ShopChangedEvent}) {
+		return
+	}
+
+	entries, resSpec, err := services.FetchShop()
 	if err != nil {
 		utils.Log("An error occurred while fetching shop entries: " + err.Error())
 		return
 	}
+
+	checkResponse(db, embeds, resSpec)
 
 	var dbEntries []structures.ShopEntry
 	db.Find(&dbEntries)
@@ -46,7 +54,7 @@ func checkShopEntries(db *gorm.DB, embeds *[]discord.Embed) {
 func makeShopEmbed(entries []structures.ShopEntry) *discord.Embed {
 	frontBaseUrl := viper.GetString("frontBaseUrl")
 
-	embed := services.DefaultEmbed("shop_changed", fmt.Sprintf("%s/echoppe", frontBaseUrl))
+	embed := services.DefaultEmbed(ShopChangedEvent, fmt.Sprintf("%s/echoppe", frontBaseUrl))
 	itemsField := &discord.EmbedField{
 		Name:   "Items",
 		Value:  "",
@@ -84,7 +92,6 @@ func makeShopEmbed(entries []structures.ShopEntry) *discord.Embed {
 		itemsField.Value += fmt.Sprintf("`%-*s %d`%s\n", maxNameLength, name, price, emoji)
 	}
 
-	services.MakeFooter(itemsField)
 	embed.Fields = []*discord.EmbedField{itemsField}
 
 	return embed

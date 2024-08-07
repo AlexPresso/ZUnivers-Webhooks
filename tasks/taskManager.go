@@ -14,7 +14,7 @@ func ScheduleTasks(db *gorm.DB) {
 
 	_, _ = s.Every(20).Minutes().Do(checkInfos, db)
 	_, _ = s.Every(1).Minutes().Do(checkShop, db)
-	_, _ = s.Every(1).Days().At("00:01").Do(newDay)
+	_, _ = s.Every(1).Days().At("00:00").Do(newDay)
 
 	s.StartBlocking()
 }
@@ -49,7 +49,7 @@ func checkShop(db *gorm.DB) {
 func newDay() {
 	utils.Log("New day")
 
-	services.DispatchEmbeds(&[]discord.Embed{
-		*services.MakeEmbed("new_day", nil, nil),
-	})
+	embeds := &[]discord.Embed{}
+	services.MakeEmbed("new_day", nil, nil, embeds)
+	services.DispatchEmbeds(embeds)
 }

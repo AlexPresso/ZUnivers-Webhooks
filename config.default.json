@@ -15,96 +15,124 @@
   "webhooks": [],
   "events": {
     "config_changed": {
+      "enabled": true,
       "role": "",
       "message": "Un paramètre de configuration a changé !"
     },
     "new_patchnote": {
+      "enabled": true,
       "role": "",
       "message": "Une nouvelle patchnote a été publiée !"
     },
     "status_changed": {
+      "enabled": true,
       "role": "",
       "message": "Le statut de l'application a changé."
     },
     "new_day": {
+      "enabled": true,
       "role": "",
       "message": "C'est l'heure du `!daily` ! (<#808432657838768168>)"
     },
     "item_changed": {
+      "enabled": true,
       "role": "",
       "message": "Un item a été modifié !"
     },
     "new_item": {
+      "enabled": true,
       "role": "",
       "message": "Un nouvel item a été ajouté !"
     },
     "item_removed": {
+      "enabled": true,
       "role": "",
       "message": "Un item a été supprimé"
     },
     "pack_changed": {
+      "enabled": true,
       "role": "",
       "message": "Un Pack a été modifié !"
     },
     "new_pack": {
+      "enabled": true,
       "role": "",
       "message": "Un nouveau pack a été ajouté !"
     },
     "pack_removed": {
+      "enabled": true,
       "role": "",
       "message": "Un pack a été supprimé."
     },
     "new_season": {
+      "enabled": true,
       "role": "",
       "message": "Une nouvelle saison de l'ascension a démarré !"
     },
     "new_banner": {
+      "enabled": true,
       "role": "",
       "message": "Une nouvelle bannière a été ajoutée !"
     },
     "banner_changed": {
+      "enabled": true,
       "role": "",
       "message": "Une bannière a été modifiée !"
     },
     "new_event": {
+      "enabled": true,
       "role": "",
       "message": "Un nouvel event a débuté !"
     },
     "event_changed": {
+      "enabled": true,
       "role": "",
       "message": "Un event a été modifié"
     },
     "event_removed": {
+      "enabled": true,
       "role": "",
       "message": "Un event s'est terminé."
     },
     "new_achievement_category": {
+      "enabled": true,
       "role": "",
       "message": "Une catégorie de succès a été ajoutée."
     },
     "achievement_category_changed": {
+      "enabled": true,
       "role": "",
       "message": "Une catégorie de succès a été modifiée."
     },
     "new_achievement": {
+      "enabled": true,
       "role": "",
       "message": "Un succès a été ajouté."
     },
     "achievement_changed": {
+      "enabled": true,
       "role": "",
       "message": "Un succès a été modifié."
     },
     "challenge_changed": {
+      "enabled": true,
       "role": "",
       "message": "Un challenge a été modifié."
     },
     "new_challenge": {
+      "enabled": true,
       "role": "",
       "message": "Un nouveau challenge a débuté"
     },
     "shop_changed": {
+      "enabled": true,
       "role": "",
       "message": "De nouveaux objets sont disponibles dans mon [magasin](%s) !"
+    },
+    "response_changed": {
+      "enabled": false,
+      "role": "",
+      "message": "Le format de la réponse de `%s` a changé ! "
     }
   }
 }

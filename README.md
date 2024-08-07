@@ -9,6 +9,7 @@ Discord webhooks dispatcher for the ZUnivers card game.
 This project is not affiliated with the ZUnivers's project. It's a community project.
 
 ## Features
+All events/checks can be enabled/disabled based on your needs using the `enabled: true/false` booleans in config file
 
 - ✅ `!daily` reminder
 - ✅ Notifies for new patchnotes
@@ -22,7 +23,8 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
 - ✅ Notifies for new achievements/achievements changes
 - ✅ Notifies for new challenges
 - ✅ Notifies for shop changes
-- ✅ Multiple webhooks dispatching
+- ✅ Notifies for API response model changes (disabled by default)
+- ✅ Multiple webhooks dispatching (as a pool to mitigate Discord rate limits)
 
 ## Usage
 
@@ -37,23 +39,4 @@ This project is not affiliated with the ZUnivers's project. It's a community pro
 Note: you can also deploy zunivers-webhooks to a kubernetes cluster using the
 following [helm chart](https://github.com/AlexPresso/helm.alexpresso.me/tree/main/charts/zunivers-webhooks)
 
-
-`config.json` example:
-
-```json
-{
-  "frontBaseUrl": "https://zunivers.zerator.com",
-  "cdnBaseUrl": "https://minio-zunivers-prod.prod.poneyy.fr/zunivers-prod",
-  "api": {
-    "baseUrl": "https://zunivers-api.zerator.com",
-    "timeout": 10
-  },
-  "webhooks": [
-    "https://discord.com/api/webhooks/123456789/........."
-  ],
-  "messages": {
-    ...
-  }
-}
-```
-
+`config.json` example: see [this file](https://github.com/AlexPresso/ZUnivers-Webhooks/blob/main/config.default.json)

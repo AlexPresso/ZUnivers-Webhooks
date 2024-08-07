@@ -14,7 +14,7 @@ const NewAchievementCategoryEvent = "new_achievement_category"
 const AchievementCategoryChangedEvent = "achievement_category_changed"
 
 func checkAchievementCategories(db *gorm.DB, embeds *[]discord.Embed) {
-	if !utils.EventsEnabled([]string{NewAchievementCategoryEvent, AchievementCategoryChangedEvent}) {
+	if utils.EventsAllDisabled([]string{NewAchievementCategoryEvent, AchievementCategoryChangedEvent}) {
 		return
 	}
 
@@ -50,10 +50,10 @@ func checkAchievementCategories(db *gorm.DB, embeds *[]discord.Embed) {
 			category.ID = dbCategory.ID
 
 			if utils.AreDifferent(*category, *dbCategory) {
-				*embeds = append(*embeds, *services.MakeEmbed(AchievementCategoryChangedEvent, *dbCategory, *category))
+				services.MakeEmbed(AchievementCategoryChangedEvent, *dbCategory, *category, embeds)
 			}
 		} else if len(dbCategories) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed(NewAchievementCategoryEvent, nil, *category))
+			services.MakeEmbed(NewAchievementCategoryEvent, nil, *category, embeds)
 		}
 
 		checkAchievements(category.CategoryID, db, embeds, dbAchievementsMap)
@@ -63,7 +63,7 @@ func checkAchievementCategories(db *gorm.DB, embeds *[]discord.Embed) {
 }
 
 func checkAchievements(categoryId string, db *gorm.DB, embeds *[]discord.Embed, dbAchievementsMap map[string]*structures.Achievement) {
-	if !utils.EventsEnabled([]string{NewAchievementEvent, AchievementChangedEvent}) {
+	if !utils.EventsAllDisabled([]string{NewAchievementEvent, AchievementChangedEvent}) {
 		return
 	}
 
@@ -86,10 +86,10 @@ func checkAchievements(categoryId string, db *gorm.DB, embeds *[]discord.Embed, 
 			(*achievement).ID = dbAchievement.ID
 
 			if utils.AreDifferent(**achievement, *dbAchievement) {
-				*embeds = append(*embeds, *services.MakeEmbed(AchievementChangedEvent, *dbAchievement, **achievement))
+				services.MakeEmbed(AchievementChangedEvent, *dbAchievement, **achievement, embeds)
 			}
 		} else if len(dbAchievementsMap) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed(NewAchievementEvent, nil, **achievement))
+			services.MakeEmbed(NewAchievementEvent, nil, **achievement, embeds)
 		}
 	}
 

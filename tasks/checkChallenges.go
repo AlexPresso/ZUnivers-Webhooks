@@ -12,7 +12,7 @@ const NewChallengeEvent = "new_challenge"
 const ChallengeChangedEvent = "challenge_changed"
 
 func checkChallenges(db *gorm.DB, embeds *[]discord.Embed) {
-	if !utils.EventsEnabled([]string{NewChallengeEvent, ChallengeChangedEvent}) {
+	if utils.EventsAllDisabled([]string{NewChallengeEvent, ChallengeChangedEvent}) {
 		return
 	}
 
@@ -43,10 +43,10 @@ func checkChallenges(db *gorm.DB, embeds *[]discord.Embed) {
 			(*challenge).ID = dbChallenge.ID
 
 			if utils.AreDifferent(**challenge, *dbChallenge) {
-				*embeds = append(*embeds, *services.MakeEmbed(ChallengeChangedEvent, *dbChallenge, **challenge))
+				services.MakeEmbed(ChallengeChangedEvent, *dbChallenge, **challenge, embeds)
 			}
 		} else if len(dbChallengesMap) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed(NewChallengeEvent, nil, **challenge))
+			services.MakeEmbed(NewChallengeEvent, nil, **challenge, embeds)
 		}
 	}
 

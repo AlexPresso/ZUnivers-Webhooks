@@ -11,7 +11,7 @@ import (
 const NewSeasonEvent = "new_season"
 
 func checkSeason(db *gorm.DB, embeds *[]discord.Embed) {
-	if !utils.EventsEnabled([]string{NewSeasonEvent}) {
+	if utils.EventsAllDisabled([]string{NewSeasonEvent}) {
 		return
 	}
 
@@ -28,7 +28,7 @@ func checkSeason(db *gorm.DB, embeds *[]discord.Embed) {
 		season.ID = dbSeason.ID
 
 		if utils.AreDifferent(dbSeason, season) {
-			*embeds = append(*embeds, *services.MakeEmbed(NewSeasonEvent, dbSeason, season))
+			services.MakeEmbed(NewSeasonEvent, dbSeason, season, embeds)
 		}
 	}
 

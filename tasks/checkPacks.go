@@ -13,7 +13,7 @@ const PackChangedEvent = "pack_changed"
 const PackRemovedEvent = "pack_removed"
 
 func checkPacks(db *gorm.DB, embeds *[]discord.Embed) (packs []structures.Pack) {
-	if !utils.EventsEnabled([]string{NewPackEvent, PackChangedEvent, PackRemovedEvent}) {
+	if utils.EventsAllDisabled([]string{NewPackEvent, PackChangedEvent, PackRemovedEvent}) {
 		return
 	}
 
@@ -47,10 +47,10 @@ func checkPacks(db *gorm.DB, embeds *[]discord.Embed) (packs []structures.Pack) 
 			pack.ID = dbPack.ID
 
 			if utils.AreDifferent(*dbPack, *pack) {
-				*embeds = append(*embeds, *services.MakeEmbed(PackChangedEvent, *dbPack, *pack))
+				services.MakeEmbed(PackChangedEvent, *dbPack, *pack, embeds)
 			}
 		} else if len(dbPacksMap) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed(NewPackEvent, nil, *pack))
+			services.MakeEmbed(NewPackEvent, nil, *pack, embeds)
 		}
 	}
 
@@ -60,7 +60,7 @@ func checkPacks(db *gorm.DB, embeds *[]discord.Embed) (packs []structures.Pack) 
 		pack := pack
 		if packsMap[pack.PackID] == nil {
 			db.Delete(&pack)
-			*embeds = append(*embeds, *services.MakeEmbed(PackRemovedEvent, nil, pack))
+			services.MakeEmbed(PackRemovedEvent, nil, pack, embeds)
 		}
 	}
 

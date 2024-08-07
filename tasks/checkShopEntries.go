@@ -13,7 +13,7 @@ import (
 const ShopChangedEvent = "shop_changed"
 
 func checkShopEntries(db *gorm.DB, embeds *[]discord.Embed) {
-	if !utils.EventsEnabled([]string{ShopChangedEvent}) {
+	if utils.EventsAllDisabled([]string{ShopChangedEvent}) {
 		return
 	}
 

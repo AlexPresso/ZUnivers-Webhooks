@@ -12,7 +12,7 @@ const NewBannerEvent = "new_banner"
 const BannerChangedEvent = "banner_changed"
 
 func checkBanners(db *gorm.DB, embeds *[]discord.Embed) {
-	if !utils.EventsEnabled([]string{NewBannerEvent, BannerChangedEvent}) {
+	if utils.EventsAllDisabled([]string{NewBannerEvent, BannerChangedEvent}) {
 		return
 	}
 
@@ -41,10 +41,10 @@ func checkBanners(db *gorm.DB, embeds *[]discord.Embed) {
 			banner.ID = dbBanner.ID
 
 			if utils.AreDifferent(*dbBanner, *banner) {
-				*embeds = append(*embeds, *services.MakeEmbed(BannerChangedEvent, *dbBanner, *banner))
+				services.MakeEmbed(BannerChangedEvent, *dbBanner, *banner, embeds)
 			}
 		} else if len(dbBanners) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed(NewBannerEvent, nil, *banner))
+			services.MakeEmbed(NewBannerEvent, nil, *banner, embeds)
 		}
 
 		banners = append(banners, banner)

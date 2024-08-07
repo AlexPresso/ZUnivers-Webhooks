@@ -79,7 +79,7 @@ func Request(uri, method string, body []byte, structure interface{}, resSpec *st
 	default:
 		err = json.NewDecoder(bytes.NewReader(bodyBytes)).Decode(structure)
 
-		if EventsEnabled([]string{ResponseChangedEvent}) {
+		if EventsAllDisabled([]string{ResponseChangedEvent}) {
 			var specMap interface{}
 
 			err = json.NewDecoder(bytes.NewReader(bodyBytes)).Decode(&specMap)

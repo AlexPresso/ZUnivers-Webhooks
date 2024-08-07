@@ -49,7 +49,7 @@ func checkShop(db *gorm.DB) {
 func newDay() {
 	utils.Log("New day")
 
-	services.DispatchEmbeds(&[]discord.Embed{
-		*services.MakeEmbed("new_day", nil, nil),
-	})
+	embeds := &[]discord.Embed{}
+	services.MakeEmbed("new_day", nil, nil, embeds)
+	services.DispatchEmbeds(embeds)
 }

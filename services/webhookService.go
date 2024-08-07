@@ -124,14 +124,12 @@ func DefaultEmbed(event string, placeholder string) *discord.Embed {
 }
 
 func MakeEmbed(event string, oldObject, newObject interface{}, allEmbeds *[]discord.Embed) *discord.Embed {
-	if utils.EventsAllDisabled([]string{event}) {
-		return nil
-	}
-
 	embed := DefaultEmbed(event, "")
 	fillEmbed(embed, oldObject, newObject)
 
-	*allEmbeds = append(*allEmbeds, *embed)
+	if !utils.EventsAllDisabled([]string{event}) {
+		*allEmbeds = append(*allEmbeds, *embed)
+	}
 
 	return embed
 }

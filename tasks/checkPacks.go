@@ -8,12 +8,23 @@ import (
 	"gorm.io/gorm"
 )
 
+const NewPackEvent = "new_pack"
+const PackChangedEvent = "pack_changed"
+const PackRemovedEvent = "pack_removed"
+
 func checkPacks(db *gorm.DB, embeds *[]discord.Embed) (packs []structures.Pack) {
-	packs, err := services.FetchPacks()
+	if utils.EventsAllDisabled([]string{NewPackEvent, PackChangedEvent, PackRemovedEvent}) {
+		return
+	}
+
+	packs, resSpec, err := services.FetchPacks()
 	if err != nil {
 		utils.Log("An error occurred while fetching packs: " + err.Error())
 		return
 	}
+
+	checkResponse(db, embeds, resSpec)
+
 	packsMap := make(map[string]*structures.Pack)
 	for _, pack := range packs {
 		pack := pack
@@ -36,10 +47,10 @@ func checkPacks(db *gorm.DB, embeds *[]discord.Embed) (packs []structures.Pack) 
 			pack.ID = dbPack.ID
 
 			if utils.AreDifferent(*dbPack, *pack) {
-				*embeds = append(*embeds, *services.MakeEmbed("pack_changed", *dbPack, *pack))
+				services.MakeEmbed(PackChangedEvent, *dbPack, *pack, embeds)
 			}
 		} else if len(dbPacksMap) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed("new_pack", nil, *pack))
+			services.MakeEmbed(NewPackEvent, nil, *pack, embeds)
 		}
 	}
 
@@ -49,7 +60,7 @@ func checkPacks(db *gorm.DB, embeds *[]discord.Embed) (packs []structures.Pack) 
 		pack := pack
 		if packsMap[pack.PackID] == nil {
 			db.Delete(&pack)
-			*embeds = append(*embeds, *services.MakeEmbed("pack_removed", nil, pack))
+			services.MakeEmbed(PackRemovedEvent, nil, pack, embeds)
 		}
 	}
 

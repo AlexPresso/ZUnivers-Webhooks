@@ -8,12 +8,23 @@ import (
 	"gorm.io/gorm"
 )
 
+const NewItemEvent = "new_item"
+const ItemChangedEvent = "item_changed"
+const ItemRemovedEvent = "item_removed"
+
 func checkItems(db *gorm.DB, embeds *[]discord.Embed) {
-	items, err := services.FetchItems()
+	if utils.EventsAllDisabled([]string{NewItemEvent, ItemChangedEvent, ItemRemovedEvent}) {
+		return
+	}
+
+	items, resSpec, err := services.FetchItems()
 	if err != nil {
 		utils.Log("An error occurred while fetching items: " + err.Error())
 		return
 	}
+
+	checkResponse(db, embeds, resSpec)
+
 	itemsMap := make(map[string]*structures.Item)
 	for _, item := range items {
 		item := item
@@ -43,10 +54,10 @@ func checkItems(db *gorm.DB, embeds *[]discord.Embed) {
 			item.ID = dbItem.ID
 
 			if utils.AreDifferent(*item, *dbItem) {
-				*embeds = append(*embeds, *services.MakeEmbed("item_changed", *dbItem, *item))
+				services.MakeEmbed(ItemChangedEvent, *dbItem, *item, embeds)
 			}
 		} else if len(dbItems) > 0 {
-			*embeds = append(*embeds, *services.MakeEmbed("new_item", nil, *item))
+			services.MakeEmbed(NewItemEvent, nil, *item, embeds)
 		}
 	}
 
@@ -56,7 +67,7 @@ func checkItems(db *gorm.DB, embeds *[]discord.Embed) {
 		item := item
 		if itemsMap[item.ItemID] == nil {
 			db.Delete(&item)
-			*embeds = append(*embeds, *services.MakeEmbed("item_removed", nil, item))
+			services.MakeEmbed(ItemRemovedEvent, nil, item, embeds)
 		}
 	}
 }

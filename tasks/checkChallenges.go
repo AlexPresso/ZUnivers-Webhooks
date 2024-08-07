@@ -22,7 +22,7 @@ func checkChallenges(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	checkResponse(db, embeds, ChallengeChangedEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	var challenges []*structures.Challenge
 	var dbChallenges []structures.Challenge

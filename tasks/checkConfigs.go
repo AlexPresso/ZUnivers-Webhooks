@@ -22,7 +22,7 @@ func checkConfigs(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	checkResponse(db, embeds, ConfigChangedEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	var dbConfigs []structures.Config
 	db.Find(&dbConfigs)

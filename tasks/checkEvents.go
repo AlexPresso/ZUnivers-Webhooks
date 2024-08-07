@@ -23,7 +23,7 @@ func checkEvents(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	checkResponse(db, embeds, EventChangedEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	eventsMap := make(map[string]*structures.Event)
 	for _, event := range events {

@@ -24,7 +24,7 @@ func checkAchievementCategories(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	checkResponse(db, embeds, AchievementCategoryChangedEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	var dbCategories []structures.AchievementCategory
 	db.Find(&dbCategories)
@@ -73,7 +73,7 @@ func checkAchievements(categoryId string, db *gorm.DB, embeds *[]discord.Embed, 
 		return
 	}
 
-	checkResponse(db, embeds, AchievementChangedEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	var achievements []*structures.Achievement
 

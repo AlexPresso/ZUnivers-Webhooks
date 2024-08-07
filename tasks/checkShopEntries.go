@@ -23,7 +23,7 @@ func checkShopEntries(db *gorm.DB, embeds *[]discord.Embed) {
 		return
 	}
 
-	checkResponse(db, embeds, ShopChangedEvent, resSpec)
+	checkResponse(db, embeds, resSpec)
 
 	var dbEntries []structures.ShopEntry
 	db.Find(&dbEntries)

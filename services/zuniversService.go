@@ -76,3 +76,8 @@ func FetchLogo() (logo image.Image, err error) {
 	err = utils.Request("/assets/logo-mini.png", "GET", nil, &logo, &structures.JsonResponseSpec{})
 	return
 }
+
+func FetchRoute(route string) (st interface{}, resSpec structures.JsonResponseSpec, err error) {
+	err = utils.Request(route, "GET", nil, &st, &resSpec)
+	return
+}

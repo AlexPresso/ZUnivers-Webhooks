@@ -50,7 +50,7 @@ jobs:
       - name: Delete old images
         uses: actions/delete-package-versions@v5
         with:
-          package-name: ${{ env.IMAGE_NAME }}
+          package-name: 'zunivers-webhooks'
           package-type: 'container'
           min-versions-to-keep: 5
 

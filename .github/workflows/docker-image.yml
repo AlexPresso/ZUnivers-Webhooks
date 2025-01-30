@@ -50,8 +50,8 @@ jobs:
       - name: Delete old images
         uses: actions/delete-package-versions@v5
         with:
-          package_name: ${{ env.IMAGE_NAME }}
-          package_type: 'container'
+          package-name: ${{ env.IMAGE_NAME }}
+          package-type: 'container'
           min-versions-to-keep: 5
 
       - name: Build and push Docker image
